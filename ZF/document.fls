@@ -1,7 +1,7 @@
-PWD c:\Users\Riccardo Degiacomi\Desktop\AEMBS\ZF
+PWD c:\Users\Riccardo Degiacomi\Desktop\Test\zf_aembs\ZF
 INPUT C:\Users\Riccardo Degiacomi\AppData\Local\MiKTeX\2.9\miktex\data\le\pdftex\pdflatex.fmt
-INPUT c:\Users\Riccardo Degiacomi\Desktop\AEMBS\ZF\document.tex
-OUTPUT c:\Users\Riccardo Degiacomi\Desktop\AEMBS\ZF\document.log
+INPUT c:\Users\Riccardo Degiacomi\Desktop\Test\zf_aembs\ZF\document.tex
+OUTPUT c:\Users\Riccardo Degiacomi\Desktop\Test\zf_aembs\ZF\document.log
 INPUT C:\Program Files\MiKTeX 2.9\tex\latex\extsizes\extarticle.cls
 INPUT C:\Program Files\MiKTeX 2.9\tex\latex\extsizes\extarticle.cls
 INPUT C:\Program Files\MiKTeX 2.9\tex\latex\extsizes\size8.clo
@@ -9,8 +9,8 @@ INPUT C:\Program Files\MiKTeX 2.9\tex\latex\extsizes\size8.clo
 INPUT C:\Program Files\MiKTeX 2.9\fonts\tfm\public\cm\cmr8.tfm
 INPUT C:\Program Files\MiKTeX 2.9\tex\latex\base\exscale.sty
 INPUT C:\Program Files\MiKTeX 2.9\tex\latex\base\exscale.sty
-INPUT c:\Users\Riccardo Degiacomi\Desktop\AEMBS\ZF\include\Vorlage_Cheatsheet.sty
-INPUT c:\Users\Riccardo Degiacomi\Desktop\AEMBS\ZF\include\Vorlage_Cheatsheet.sty
+INPUT c:\Users\Riccardo Degiacomi\Desktop\Test\zf_aembs\ZF\include\Vorlage_Cheatsheet.sty
+INPUT c:\Users\Riccardo Degiacomi\Desktop\Test\zf_aembs\ZF\include\Vorlage_Cheatsheet.sty
 INPUT C:\Program Files\MiKTeX 2.9\tex\latex\tools\multicol.sty
 INPUT C:\Program Files\MiKTeX 2.9\tex\latex\tools\multicol.sty
 INPUT C:\Program Files\MiKTeX 2.9\tex\latex\soul\soul.sty
@@ -82,8 +82,8 @@ INPUT C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\amssymb.sty
 INPUT C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\amssymb.sty
 INPUT C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\amsfonts.sty
 INPUT C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\amsfonts.sty
-INPUT c:\Users\Riccardo Degiacomi\Desktop\AEMBS\ZF\include\report.sty
-INPUT c:\Users\Riccardo Degiacomi\Desktop\AEMBS\ZF\include\report.sty
+INPUT c:\Users\Riccardo Degiacomi\Desktop\Test\zf_aembs\ZF\include\report.sty
+INPUT c:\Users\Riccardo Degiacomi\Desktop\Test\zf_aembs\ZF\include\report.sty
 INPUT C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\mathptmx.sty
 INPUT C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\mathptmx.sty
 INPUT C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\helvet.sty
@@ -295,9 +295,9 @@ INPUT C:\Program Files\MiKTeX 2.9\tex\latex\koma-script\scrkbase.sty
 INPUT C:\Program Files\MiKTeX 2.9\tex\latex\koma-script\scrkbase.sty
 INPUT C:\Program Files\MiKTeX 2.9\tex\latex\koma-script\scrbase.sty
 INPUT C:\Program Files\MiKTeX 2.9\tex\latex\koma-script\scrbase.sty
-INPUT c:\Users\Riccardo Degiacomi\Desktop\AEMBS\ZF\document.aux
-INPUT c:\Users\Riccardo Degiacomi\Desktop\AEMBS\ZF\document.aux
-OUTPUT c:\Users\Riccardo Degiacomi\Desktop\AEMBS\ZF\document.aux
+INPUT c:\Users\Riccardo Degiacomi\Desktop\Test\zf_aembs\ZF\document.aux
+INPUT c:\Users\Riccardo Degiacomi\Desktop\Test\zf_aembs\ZF\document.aux
+OUTPUT c:\Users\Riccardo Degiacomi\Desktop\Test\zf_aembs\ZF\document.aux
 INPUT C:\Program Files\MiKTeX 2.9\tex\context\base\mkii\supp-pdf.mkii
 INPUT C:\Program Files\MiKTeX 2.9\tex\context\base\mkii\supp-pdf.mkii
 INPUT C:\Program Files\MiKTeX 2.9\tex\latex\epstopdf-pkg\epstopdf-base.sty
@@ -314,10 +314,10 @@ INPUT C:\Program Files\MiKTeX 2.9\tex\latex\biblatex\lbx\german.lbx
 INPUT C:\Program Files\MiKTeX 2.9\tex\latex\biblatex\lbx\german.lbx
 INPUT C:\Program Files\MiKTeX 2.9\tex\latex\biblatex\lbx\german.lbx
 INPUT C:\Program Files\MiKTeX 2.9\tex\latex\biblatex\lbx\german.lbx
-OUTPUT c:\Users\Riccardo Degiacomi\Desktop\AEMBS\ZF\document.bcf
-INPUT c:\Users\Riccardo Degiacomi\Desktop\AEMBS\ZF\document.bbl
-INPUT c:\Users\Riccardo Degiacomi\Desktop\AEMBS\ZF\document.bbl
-INPUT c:\Users\Riccardo Degiacomi\Desktop\AEMBS\ZF\document.bbl
+OUTPUT c:\Users\Riccardo Degiacomi\Desktop\Test\zf_aembs\ZF\document.bcf
+INPUT c:\Users\Riccardo Degiacomi\Desktop\Test\zf_aembs\ZF\document.bbl
+INPUT c:\Users\Riccardo Degiacomi\Desktop\Test\zf_aembs\ZF\document.bbl
+INPUT c:\Users\Riccardo Degiacomi\Desktop\Test\zf_aembs\ZF\document.bbl
 INPUT C:\Program Files\MiKTeX 2.9\tex\latex\translations\dicts\translations-basic-dictionary-german.trsl
 INPUT C:\Program Files\MiKTeX 2.9\tex\latex\translations\dicts\translations-basic-dictionary-german.trsl
 INPUT C:\Program Files\MiKTeX 2.9\tex\latex\hyperref\nameref.sty
@@ -326,14 +326,14 @@ INPUT C:\Program Files\MiKTeX 2.9\tex\latex\refcount\refcount.sty
 INPUT C:\Program Files\MiKTeX 2.9\tex\latex\refcount\refcount.sty
 INPUT C:\Program Files\MiKTeX 2.9\tex\generic\gettitlestring\gettitlestring.sty
 INPUT C:\Program Files\MiKTeX 2.9\tex\generic\gettitlestring\gettitlestring.sty
-INPUT c:\Users\Riccardo Degiacomi\Desktop\AEMBS\ZF\document.out
-INPUT c:\Users\Riccardo Degiacomi\Desktop\AEMBS\ZF\document.out
-INPUT c:\Users\Riccardo Degiacomi\Desktop\AEMBS\ZF\document.out
-INPUT c:\Users\Riccardo Degiacomi\Desktop\AEMBS\ZF\document.out
-OUTPUT c:\Users\Riccardo Degiacomi\Desktop\AEMBS\ZF\document.pdf
-INPUT c:\Users\Riccardo Degiacomi\Desktop\AEMBS\ZF\document.out
-INPUT c:\Users\Riccardo Degiacomi\Desktop\AEMBS\ZF\document.out
-OUTPUT c:\Users\Riccardo Degiacomi\Desktop\AEMBS\ZF\document.out
+INPUT c:\Users\Riccardo Degiacomi\Desktop\Test\zf_aembs\ZF\document.out
+INPUT c:\Users\Riccardo Degiacomi\Desktop\Test\zf_aembs\ZF\document.out
+INPUT c:\Users\Riccardo Degiacomi\Desktop\Test\zf_aembs\ZF\document.out
+INPUT c:\Users\Riccardo Degiacomi\Desktop\Test\zf_aembs\ZF\document.out
+OUTPUT c:\Users\Riccardo Degiacomi\Desktop\Test\zf_aembs\ZF\document.pdf
+INPUT c:\Users\Riccardo Degiacomi\Desktop\Test\zf_aembs\ZF\document.out
+INPUT c:\Users\Riccardo Degiacomi\Desktop\Test\zf_aembs\ZF\document.out
+OUTPUT c:\Users\Riccardo Degiacomi\Desktop\Test\zf_aembs\ZF\document.out
 INPUT C:\Program Files\MiKTeX 2.9\fonts\tfm\adobe\times\ptmr8t.tfm
 INPUT C:\Program Files\MiKTeX 2.9\fonts\tfm\adobe\times\ptmb8t.tfm
 INPUT C:\Program Files\MiKTeX 2.9\fonts\tfm\adobe\times\ptmr8t.tfm
@@ -373,16 +373,16 @@ INPUT C:\Program Files\MiKTeX 2.9\fonts\tfm\adobe\times\ptmb7t.tfm
 INPUT C:\Program Files\MiKTeX 2.9\fonts\tfm\adobe\times\ptmri7t.tfm
 INPUT C:\Program Files\MiKTeX 2.9\fonts\tfm\adobe\times\ptmri7t.tfm
 INPUT C:\Program Files\MiKTeX 2.9\fonts\tfm\adobe\times\ptmri7t.tfm
-INPUT c:\Users\Riccardo Degiacomi\Desktop\AEMBS\ZF\img\Hardware_Hierarchie.png
-INPUT c:\Users\Riccardo Degiacomi\Desktop\AEMBS\ZF\img\Hardware_Hierarchie.png
-INPUT c:\Users\Riccardo Degiacomi\Desktop\AEMBS\ZF\img\Hardware_Hierarchie.png
-INPUT c:\Users\Riccardo Degiacomi\Desktop\AEMBS\ZF\img\Hardware_Hierarchie.png
-INPUT c:\Users\Riccardo Degiacomi\Desktop\AEMBS\ZF\img\Hardware_Hierarchie.png
-INPUT c:\Users\Riccardo Degiacomi\Desktop\AEMBS\ZF\img\Integrated_Development_environement.png
-INPUT c:\Users\Riccardo Degiacomi\Desktop\AEMBS\ZF\img\Integrated_Development_environement.png
-INPUT c:\Users\Riccardo Degiacomi\Desktop\AEMBS\ZF\img\Integrated_Development_environement.png
-INPUT c:\Users\Riccardo Degiacomi\Desktop\AEMBS\ZF\img\Integrated_Development_environement.png
-INPUT c:\Users\Riccardo Degiacomi\Desktop\AEMBS\ZF\img\Integrated_Development_environement.png
+INPUT c:\Users\Riccardo Degiacomi\Desktop\Test\zf_aembs\ZF\img\Hardware_Hierarchie.png
+INPUT c:\Users\Riccardo Degiacomi\Desktop\Test\zf_aembs\ZF\img\Hardware_Hierarchie.png
+INPUT c:\Users\Riccardo Degiacomi\Desktop\Test\zf_aembs\ZF\img\Hardware_Hierarchie.png
+INPUT c:\Users\Riccardo Degiacomi\Desktop\Test\zf_aembs\ZF\img\Hardware_Hierarchie.png
+INPUT c:\Users\Riccardo Degiacomi\Desktop\Test\zf_aembs\ZF\img\Hardware_Hierarchie.png
+INPUT c:\Users\Riccardo Degiacomi\Desktop\Test\zf_aembs\ZF\img\Integrated_Development_environement.png
+INPUT c:\Users\Riccardo Degiacomi\Desktop\Test\zf_aembs\ZF\img\Integrated_Development_environement.png
+INPUT c:\Users\Riccardo Degiacomi\Desktop\Test\zf_aembs\ZF\img\Integrated_Development_environement.png
+INPUT c:\Users\Riccardo Degiacomi\Desktop\Test\zf_aembs\ZF\img\Integrated_Development_environement.png
+INPUT c:\Users\Riccardo Degiacomi\Desktop\Test\zf_aembs\ZF\img\Integrated_Development_environement.png
 INPUT C:\Program Files\MiKTeX 2.9\fonts\tfm\adobe\times\ptmro8t.tfm
 INPUT C:\Program Files\MiKTeX 2.9\fonts\vf\adobe\times\ptmb8t.vf
 INPUT C:\Program Files\MiKTeX 2.9\fonts\tfm\adobe\times\ptmb8r.tfm
@@ -405,11 +405,11 @@ INPUT C:\Program Files\MiKTeX 2.9\fonts\vf\adobe\times\zptmcm7t.vf
 INPUT C:\Program Files\MiKTeX 2.9\fonts\tfm\adobe\symbol\psyr.tfm
 INPUT C:\Program Files\MiKTeX 2.9\fonts\tfm\adobe\times\ptmr8r.tfm
 INPUT C:\Program Files\MiKTeX 2.9\fonts\tfm\public\cm\cmr10.tfm
-INPUT c:\Users\Riccardo Degiacomi\Desktop\AEMBS\ZF\document.aux
-INPUT c:\Users\Riccardo Degiacomi\Desktop\AEMBS\ZF\document.out
-INPUT c:\Users\Riccardo Degiacomi\Desktop\AEMBS\ZF\document.out
-INPUT c:\Users\Riccardo Degiacomi\Desktop\AEMBS\ZF\document.run.xml
-OUTPUT c:\Users\Riccardo Degiacomi\Desktop\AEMBS\ZF\document.run.xml
+INPUT c:\Users\Riccardo Degiacomi\Desktop\Test\zf_aembs\ZF\document.aux
+INPUT c:\Users\Riccardo Degiacomi\Desktop\Test\zf_aembs\ZF\document.out
+INPUT c:\Users\Riccardo Degiacomi\Desktop\Test\zf_aembs\ZF\document.out
+INPUT c:\Users\Riccardo Degiacomi\Desktop\Test\zf_aembs\ZF\document.run.xml
+OUTPUT c:\Users\Riccardo Degiacomi\Desktop\Test\zf_aembs\ZF\document.run.xml
 INPUT C:\Program Files\MiKTeX 2.9\fonts\enc\dvips\base\8r.enc
 INPUT C:\Program Files\MiKTeX 2.9\fonts\type1\public\amsfonts\cm\cmsy10.pfb
 INPUT C:\Program Files\MiKTeX 2.9\fonts\type1\public\amsfonts\cm\cmsy10.pfb
