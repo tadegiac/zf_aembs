@@ -1,0 +1,60 @@
+\usepackage{mathptmx}
+\usepackage[scaled=0.9]{helvet}
+\usepackage{courier}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage{subfig}
+\usepackage{lastpage}
+\usepackage{pdfpages}
+\usepackage{trfsigns}
+
+
+% Biblatex
+\usepackage[backend=biber,style=numeric]{biblatex}
+\usepackage{csquotes}
+\addbibresource{bib/bibliography.bib}
+
+% Geometry
+\usepackage{geometry}
+\geometry{hmargin=2.5cm, top=3cm, bottom = 3cm}
+\geometry{head=30pt}
+
+% \usepackage{tikz-sfc}
+\usepackage{glossaries}
+\usepackage{acro}
+\usepackage{hyperref}
+\usepackage{endnotes}
+
+% Header und Footer
+\usepackage[headsepline,footsepline]{scrlayer-scrpage}
+\clearpairofpagestyles
+\addtokomafont{pagehead}{\normalfont}
+\addtokomafont{pagefoot}{\normalfont}
+
+% Eigene Kommandos für vertikale Laplace-Funktionsdarstellung
+\newcommand{\vlaplace}[1][]{\mbox{\setlength{\unitlength}{0.1em}%
+\begin{picture}(10,20)%
+    \put(3,2){\circle{4}}%
+    \put(3,4){\line(0,1){12}}%
+    \put(3,18){\circle*{4}}%
+    \put(10,7){#1}
+\end{picture}%
+}%
+}%
+
+\newcommand{\vLaplace}[1][]{\mbox{\setlength{\unitlength}{0.1em}%
+\begin{picture}(10,20)%
+    \put(3,2){\circle*{4}}%
+    \put(3,4){\line(0,1){12}}%
+    \put(3,18){\circle{4}}%
+    \put(10,7){#1}
+\end{picture}%
+}%
+}% 
+
+
+% Verhindert das Einrücken der Zeilen im gesamten Dokument
+\setlength{\parindent}{0em}
