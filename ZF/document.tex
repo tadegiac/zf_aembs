@@ -17,61 +17,60 @@
 % 3-column layout
 \begin{multicols*}{3}
 	\section{SW1 Software und tools}
-	\subsection{Design und Architektur}
-	\begin{description}
-		
-		\item[$\bullet$ Mikrocontroller:] Verwendung bei geringem Kosten und Stromverbrauch. Eignet sich für integrierung auf PCB
-		\item[$\bullet$ FPGA:] Verwendung wenn mehr Leistung gewünscht als bei $\mu C$ und man Funktionen direkt in HW implementieren möchte (vgl. hoher Stromverbrauch)
-		\item[$\bullet$ Embedded Linux:] Verwendung wenn man Netzwerkstacks und Internet nutzen möchte. Bietet grosse Funktionalität. Nachteil; nicht gut für "harte" Echtzeit Anwendungen (langer bootvorgang).
-		\item[$\bullet$ Host:] Verwendung bei grossen Systemen. Host ist ähnlich wie PC. Wird oft für GUI und SCADA (Control And Data Acquisition) verwendet.
-		
-	\end{description}
+		\subsection{Design und Architektur}
+			\begin{description}
+				
+				\item[$\bullet$ Mikrocontroller:] Verwendung bei geringem Kosten und Stromverbrauch. Eignet sich für integrierung auf PCB
+				\item[$\bullet$ FPGA:] Verwendung wenn mehr Leistung gewünscht als bei $\mu C$ und man Funktionen direkt in HW implementieren möchte (vgl. hoher Stromverbrauch)
+				\item[$\bullet$ Embedded Linux:] Verwendung wenn man Netzwerkstacks und Internet nutzen möchte. Bietet grosse Funktionalität. Nachteil; nicht gut für "harte" Echtzeit Anwendungen (langer bootvorgang).
+				\item[$\bullet$ Host:] Verwendung bei grossen Systemen. Host ist ähnlich wie PC. Wird oft für GUI und SCADA (Control And Data Acquisition) verwendet.
+				
+			\end{description}
 	Oft werden Systeme als Kombination verschiedener Blöcke Realisiert.\\
 	\\
 	\includegraphics[width=1\linewidth, left]{img/Hardware_Hierarchie}
-	\subsection{Crossdevelopment}
-	Wenn man nicht auf der selben Entität entwickeln kann spricht man von Host und Target. Auf dem host wird entwickelt, auf dem target ausgeführt. Auf dem Host wird für das Target entwickelt. Dazu nutzt man eine Toolchain.
-		\begin{description}
-		\item[$\bullet$ Target:] Ist Zielsystem für das entwickelt wird (wofür)
-		\item[$\bullet$ Host:] Umgebung auf der entwickelt wird (womit)
-		\item[$\bullet$ Toolchain:] Besteht aus Compiler, linker, debugger, standard libraries und anderen Tools
-		\item[$\bullet$ Buildumgebung:] Steuert Toolchain und Übersetzungsvorgang. Wird oft mit makefiles gemacht.
-		\item[$\bullet$ IDE:] nicht zwingend notwendig\\
-		\end{description}
+		\subsection{Crossdevelopment}
+		Wenn man nicht auf der selben Entität entwickeln kann spricht man von Host und Target. Auf dem host wird entwickelt, auf dem target ausgeführt. Auf dem Host wird für das Target entwickelt. Dazu nutzt man eine Toolchain.
+			\begin{description}
+			\item[$\bullet$ Target:] Ist Zielsystem für das entwickelt wird (wofür)
+			\item[$\bullet$ Host:] Umgebung auf der entwickelt wird (womit)
+			\item[$\bullet$ Toolchain:] Besteht aus Compiler, linker, debugger, standard libraries und anderen Tools
+			\item[$\bullet$ Buildumgebung:] Steuert Toolchain und Übersetzungsvorgang. Wird oft mit makefiles gemacht.
+			\item[$\bullet$ IDE:] nicht zwingend notwendig\\
+			\end{description}
 
 	\includegraphics[width=0.9\linewidth,left]{img/Integrated_Development_environement}
-	\section{SW2 Software und Device Treiber}
-	\subsection{Device Driver}
-			\begin{description}
-		\item[$\bullet$ Interface:] Abstrahiert von Hardware. Sollte einfach und verständlich sein
-		\item[$\bullet$ Synchronisation:] 
-		Kann Synchron sein Gadfly, Polling oder asynchron mit Interrupts, Events oder Callbacks (was ist mit snchronisation gemeint dude)
-		\item[$\bullet$ Organisation:]
-		Einfach: Eine Schnittstellendatei, eine Quelltextdatei (UART,SPI $I^2C$)
-		Komplex: Mehrere Dateien mehrere Verzeichnisse  
-		\item[$\bullet$ Konfiguration:] Treiber sollte konfigurierbar sein. Gängig ist durch Konfdatei, über Schnittstelle oder mit Makros.
-		Siehe:
-		https://mcuoneclipse.com/2019/02/23/different-ways-of-software-configuration/
-	\end{description}
-	\subsection{File Formate}
-		\subsection{Device Driver}
-	\begin{description}
-		\item[$\bullet$ ELF/Dwarf:] ist ein Standard Format zur Beschreibung eines ’Executable’
-		(Elf) zusammen mit der Debug (Dwarf) Information
-		\item[$\bullet$ S19 Motorola S-Record:] Repräsentation der Daten in textueller Form.\\
-		Das S19 Format ist ein textuelles und zeilenorientiertes Format, welches
-		\colorbox{pink}{’S’ Record ID },\colorbox{yellow}{ Länge },\colorbox{cyan}{ Adresse },\colorbox{green}{ Daten } und eine Checksumme beinhaltet.
-		Im Folgenden ein Beispiel:\\
-		\colorbox{pink}{S1} \colorbox{yellow}{13} \colorbox{cyan}{7AF0}\\ \colorbox{green}{0A0A0D00000000000000000000000000} 61
+		\section{SW2 Software und Device Treiber}
+			\subsection{Device Driver}
+				\begin{description}
+					\item[$\bullet$ Interface:] Abstrahiert von Hardware. Sollte einfach und verständlich sein
+					\item[$\bullet$ Synchronisation:] 
+					Kann Synchron sein Gadfly, Polling oder asynchron mit Interrupts, Events oder Callbacks (was ist mit snchronisation gemeint dude)
+					\item[$\bullet$ Organisation:]
+					Einfach: Eine Schnittstellendatei, eine Quelltextdatei (UART,SPI $I^2C$)
+					Komplex: Mehrere Dateien mehrere Verzeichnisse  
+					\item[$\bullet$ Konfiguration:] Treiber sollte konfigurierbar sein. Gängig ist durch Konfdatei, über Schnittstelle oder mit Makros.
+					Siehe:
+					https://mcuoneclipse.com/2019/02/23/different-ways-of-software-configuration/
+			\end{description}
 
-		\item[$\bullet$ Intel Hex:]
-		Das Intel Hex Format ist auch ein text- und zeilenbasiertes Format, bei
-		dem ein Start Code , Länge , Adresse , Typ , Daten und eine Checksumme
-		verwendet wird. Nachfolgend auch hier ein Beispiel:\\
-		: 10 0100 00 \\214601360121470136007EFE09D21901 40
-		\item[$\bullet$ Binary:] Beim Binary Format sind keine zusätzlichen Informationen vorhanden. Bei
-		diesem Format sind in der Datei einfach die ’rohen’ Bytes abgespeichert.\newline 
-	\end{description}	
+			\subsection{File Formate}
+				\begin{description}
+					\item[$\bullet$ ELF/Dwarf:] ist ein Standard Format zur Beschreibung eines ’Executable’
+					(Elf) zusammen mit der Debug (Dwarf) Information
+					\item[$\bullet$ S19 Motorola S-Record:] Repräsentation der Daten in textueller Form.\\
+					Das S19 Format ist ein textuelles und zeilenorientiertes Format, welches
+					\colorbox{pink}{’S’ Record ID },\colorbox{yellow}{ Länge },\colorbox{cyan}{ Adresse },\colorbox{green}{ Daten } und eine Checksumme beinhaltet.
+					Im Folgenden ein Beispiel:\\
+					\colorbox{pink}{S1} \colorbox{yellow}{13} \colorbox{cyan}{7AF0}\\ \colorbox{green}{0A0A0D00000000000000000000000000} 61
+					\item[$\bullet$ Intel Hex:]
+					Das Intel Hex Format ist auch ein text- und zeilenbasiertes Format, bei
+					dem ein Start Code , Länge , Adresse , Typ , Daten und eine Checksumme
+					verwendet wird. Nachfolgend auch hier ein Beispiel:\\
+					: 10 0100 00 \\214601360121470136007EFE09D21901 40
+					\item[$\bullet$ Binary:] Beim Binary Format sind keine zusätzlichen Informationen vorhanden. Bei
+					diesem Format sind in der Datei einfach die ’rohen’ Bytes abgespeichert.\newline 
+				\end{description}	
 	Gemeinsam zu Datei-Formaten von S19, Intel Hex und Binary ist es dass diese
 	keine Debug Information enthalten (mussen).\\
 	Die benötigen Formate können entweder mit den GNU Werkzeugen direkt
@@ -79,7 +78,7 @@
 	Eclipse IDE können gleich mehrere Formate gleichzeitig in eine Post-Build Step
 	erstellt werden
 	
-	
+	\section{SW3 System}
 
 
 
