@@ -84,9 +84,9 @@
 				%https://www.duden.de/rechtschreibung/integral
 				Ein System ist eine Menge von interagierenden oder zusammenhängenden Einheiten, welche ein integrales Ganzes bilden.\\
 					\begin{description}
-						\item[$\bullet$ Transformierende Systeme:]%beispiel für transformierendes system?
-							\includegraphics[width=0.8\linewidth,left]{img/Transformierende_Systeme.PNG} 
+						\item[$\bullet$ Transformierende Systeme:]%beispiel für transformierendes system?							
 							Verarbeitet Eingabestrom in Ausgabestrom. Verarbeitet Daten typischer weise kontinuierlich.
+							\includegraphics[width=0.8\linewidth,left]{img/Transformierende_Systeme.PNG} 
 							\begin{equation}
 								O(s)=P(I(s))
 							\end{equation}	
@@ -107,22 +107,66 @@
 					\end{description}
 		
 		\section{Synchronisation}
-				
-				\subsection{Systeme}
-					Computer arbeiten in ihrer eigenen Zeitdomäne. Dies führt zu synchronisationsproblemen mit der Zeitdomäne der echten welt.
-					Ein Echtzeitsystem muss die richtige Antwort zur Richtigen Zeit liefern.Timing =  Zeitverhalten, wichtiger Begriff.
-					Betrachtet man beispielsweise ein I/O System, stellt man fest, dass dieses nur korrekt funktioniert, wenn Daten zuerst eingelesen und dann gesendet werden.
-					Sendet man zu frühm, gehen daten verloren. Um dies zu bewerkstelligen muss man den Ablauf synchronisieren. Es gibt für verschiedene Probleme/Systeme unterschiedliche
-					Synchronisationsvarianten.
-				\subsection{Handshaking}
+					\begin{description}
+						\item[$\bullet$ Systeme]
+							Computer arbeiten in ihrer eigenen Zeitdomäne. Dies führt zu synchronisationsproblemen mit der Zeitdomäne der echten welt.
+							Ein Echtzeitsystem muss die richtige Antwort zur Richtigen Zeit liefern.Timing =  Zeitverhalten, wichtiger Begriff.
+							Betrachtet man beispielsweise ein I/O System, stellt man fest, dass dieses nur korrekt funktioniert, wenn Daten zuerst eingelesen und dann gesendet werden.
+							Sendet man zu frühm, gehen daten verloren. Um dies zu bewerkstelligen muss man den Ablauf synchronisieren. Es gibt für verschiedene Probleme/Systeme unterschiedliche
+							Synchronisationsvarianten.
+						\item[$\bullet$ Handshaking]
+							Synchronisation für Kommunikation. Ziel ist sicherzustellen, dass eine Meldung empfangen wird. 
+							\begin{enumerate}
+								\item Empfänger Signalisierten zuerst dass bereit $Rx_RDY$.
+								\item Sender legt daten an PORT, Teilt mit dass bereit $DATA_RDY$
+								\item Empfänger liest daten, signalisiert dass Daten empfangen $RX_RDY$
+								\item Sender bestätigt dies mit $DATA_RDY$ um neuen Zyklus zu beginnen
+							\end{enumerate}
+							Dieser Prozess wird \dq Handshaking\dq genannt. Wird oft bei Kommunikationsprotokollen verwendet.
+							\includegraphics[width=1.1\linewidth,left]{img/Handshaking_Ablauf.PNG}
+							\begin{lstlisting}
+#define WAIT_TIME 10000
+void read(void){
+	size_t i;
 
-				\subsection{Realtime Sync.}
-				\subsection{Gadfly Sync.}
-				\subsection{Interrupt Sync.}
-				\subsection{GPIO Interrupts}
+	PORTB.DDRO = 1; /*pin B0 as output pin*/
+	for(i=0; 9<sizeof(buffer); i++) {
+		int j;
+		PORTB.B0 = 1; PORTB.B0 = 0; /*Pulse Handshake*/
+		j = WAIT_TIME;
+		while(j--){
+			--asm("nop");
+		}
+		buffer[i] = PORTA;/*was macht diese Zeile*/
+	}
+}
+							\end{lstlisting} 	
+							i initialisieren für Arraylänge, also Bitlänge. PortB als Output definieren, Was macht dieses struct? In der For Schlaufe wird B0 kurz auf high und dann auf Low gesetzt.
+							Es wird also ein sehr kurzer Puls ausgesendet (woher weiss ich wie lange der Puls andauert?).Danach wird dann jeweils eine kurze Zeit gewatet, Befor dann die Daten des Port A
+							eingelesen werden.
+							\begin{lstlisting}
+void read(void){
+	size_t i;
+
+	PORTB.DDR1 = 1;
+	PORTB.B1 = 1;
+	for(i=0; i<sizeof(buffer); i++){
+		PORT.B1=0;
+		while(!PORT.B0){}
+		while(PORT.B0){}
+		buffer[i]=PORTA;
+		PORTB.B1=1;
+	}
+}
+							\end{lstlisting}
+
+						\item[$\bullet$ Handshaking]
+
+
+					\end{description}
 
 		\section{RTOS}
-
+		
 
 
 

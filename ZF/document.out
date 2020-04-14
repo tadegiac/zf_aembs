@@ -7,10 +7,4 @@
 \BOOKMARK [1][-]{section.3}{SW3 System}{}% 7
 \BOOKMARK [2][-]{subsection.3.1}{Systeme}{section.3}% 8
 \BOOKMARK [1][-]{section.4}{Synchronisation}{}% 9
-\BOOKMARK [2][-]{subsection.4.1}{Systeme}{section.4}% 10
-\BOOKMARK [2][-]{subsection.4.2}{Handshaking}{section.4}% 11
-\BOOKMARK [2][-]{subsection.4.3}{Realtime Sync.}{section.4}% 12
-\BOOKMARK [2][-]{subsection.4.4}{Gadfly Sync.}{section.4}% 13
-\BOOKMARK [2][-]{subsection.4.5}{Interrupt Sync.}{section.4}% 14
-\BOOKMARK [2][-]{subsection.4.6}{GPIO Interrupts}{section.4}% 15
-\BOOKMARK [1][-]{section.5}{RTOS}{}% 16
+\BOOKMARK [1][-]{section.5}{RTOS}{}% 10

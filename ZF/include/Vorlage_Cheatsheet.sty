@@ -20,3 +20,27 @@
 \usepackage{mathtools}
 \usepackage{amssymb}
 \usepackage{graphicx}
+%to have some colours
+\usepackage{xcolor}
+
+%TO display code 
+\usepackage{listings}
+\lstset{language=C,
+		%numbersep=1mm,
+		numbers=left, 
+		numberstyle=\tiny,
+		frame=single,
+		framesep=\fboxsep,
+		framerule=\fboxrule,
+		rulecolor=\color{black},
+		xleftmargin=\dimexpr\fboxsep+\fboxrule,
+		xrightmargin=\dimexpr\fboxsep+\fboxrule,
+		breaklines=true,
+		basicstyle=\small\tt,
+		keywordstyle=\color{blue}\sf,
+		identifierstyle=\color[rgb]{0.25,0.75,0.5},
+		commentstyle=\color[rgb]{0.75,0.25,0.5},
+		backgroundcolor=\color{gray!10},
+		tabsize=2,
+		columns=flexible,
+		}
