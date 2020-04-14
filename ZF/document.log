@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 2.9.7300 64-bit) (preloaded format=pdflatex 2020.3.7)  13 APR 2020 16:53
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 2.9.7300 64-bit) (preloaded format=pdflatex 2020.3.7)  14 APR 2020 10:17
 entering extended mode
 **"c:/Users/Riccardo Degiacomi/Desktop/AEMBS/zf_aembs/ZF/document.tex"
 ("c:/Users/Riccardo Degiacomi/Desktop/AEMBS/zf_aembs/ZF/document.tex"
@@ -1131,7 +1131,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 25--26
 []\T1/ptm/m/n/8 Verwendung wenn
  []
 
-<img/Hardware_Hierarchie.png, id=31, 651.18282pt x 347.04657pt>
+<img/Hardware_Hierarchie.png, id=67, 651.18282pt x 347.04657pt>
 File: img/Hardware_Hierarchie.png Graphic file (type png)
 <use img/Hardware_Hierarchie.png>
 Package pdftex.def Info: img/Hardware_Hierarchie.png  used on input line 31.
@@ -1146,7 +1146,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 39--40
 
  []
 
-<img/Integrated_Development_environement.png, id=33, 252.19218pt x 282.30469pt>
+<img/Integrated_Development_environement.png, id=69, 252.19218pt x 282.30469pt>
 File: img/Integrated_Development_environement.png Graphic file (type png)
 <use img/Integrated_Development_environement.png>
 Package pdftex.def Info: img/Integrated_Development_environement.png  used on input line 42.
@@ -1206,33 +1206,88 @@ Underfull \hbox (badness 10000) in paragraph at lines 71--73
 
  []
 
+
+Underfull \hbox (badness 10000) in paragraph at lines 84--86
+
+ []
+
+<img/Transformierende_Systeme.PNG, id=70, 544.28343pt x 168.63pt>
+File: img/Transformierende_Systeme.PNG Graphic file (type png)
+<use img/Transformierende_Systeme.PNG>
+Package pdftex.def Info: img/Transformierende_Systeme.PNG  used on input line 87.
+(pdftex.def)             Requested size: 109.23685pt x 33.84375pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 87--89
+[]
+ []
+
+
+Underfull \hbox (badness 6141) in paragraph at lines 87--89
+\T1/ptm/m/n/8 Ver-ar-bei-tet Ein-ga-be-strom in Aus-ga-be-
+ []
+
+<img/Reaktive_Systeme.PNG, id=71, 345.16454pt x 268.00125pt>
+File: img/Reaktive_Systeme.PNG Graphic file (type png)
+<use img/Reaktive_Systeme.PNG>
+Package pdftex.def Info: img/Reaktive_Systeme.PNG  used on input line 102.
+(pdftex.def)             Requested size: 81.92816pt x 63.61006pt.
+
+Underfull \hbox (badness 6110) in paragraph at lines 101--103
+\T1/ptm/m/n/8 scher-wei-se Steuer- und Re-gel-sys-te-me.
+ []
+
+<img/Interaktive_Systeme.PNG, id=72, 415.92891pt x 264.61359pt>
+File: img/Interaktive_Systeme.PNG Graphic file (type png)
+<use img/Interaktive_Systeme.PNG>
+Package pdftex.def Info: img/Interaktive_Systeme.PNG  used on input line 105.
+(pdftex.def)             Requested size: 81.92816pt x 52.12231pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 104--106
+[]\T1/ptm/m/n/8 Stellen Schnitt-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 104--106
+\T1/ptm/m/n/8 stel-le zu Be-nut-zer her. Auf kur-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 104--106
+\T1/ptm/m/n/8 ze Ant-wort-zeit und weil teu-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 104--106
+\T1/ptm/m/n/8 er auf ho-he aus-las-tung op-ti-miert.
+ []
+
 [1
 
-{C:/Users/Riccardo Degiacomi/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map} <c:/Users/Riccardo Degiacomi/Desktop/AEMBS/zf_aembs/ZF/img/Hardware_Hierarchie.png> <c:/Users/Riccardo Degiacomi/Desktop/AEMBS/zf_aembs/ZF/img/Integrated_Development_environement.png>] 
+{C:/Users/Riccardo Degiacomi/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map} <c:/Users/Riccardo Degiacomi/Desktop/AEMBS/zf_aembs/ZF/img/Hardware_Hierarchie.png> <c:/Users/Riccardo Degiacomi/Desktop/AEMBS/zf_aembs/ZF/img/Integrated_Development_environement.png> <c:/Users/Riccardo Degiacomi/Desktop/AEMBS/zf_aembs/ZF/img/Transformierende_Systeme.PNG> <c:/Users/Riccardo Degiacomi/Desktop/AEMBS/zf_aembs/ZF/img/Reaktive_Systeme.PNG> <c:/Users/Riccardo Degiacomi/Desktop/AEMBS/zf_aembs/ZF/img/Interaktive_Systeme.PNG>] 
 AED: lastpage setting LastPage
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 92.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 92.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 127.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 127.
 ("c:\Users\Riccardo Degiacomi\Desktop\AEMBS\zf_aembs\ZF\document.aux")
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 92.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 92.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 127.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 127.
 Package rerunfilecheck Info: File `document.out' has not changed.
-(rerunfilecheck)             Checksum: 6A22D4F83D3DEF3227AFF9FA33F1980F;427.
+(rerunfilecheck)             Checksum: E42A2FA99772486381856D4F545315E9;947.
 Package logreq Info: Writing requests to 'document.run.xml'.
 \openout1 = `document.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 30494 strings out of 481292
- 590284 string characters out of 2917509
- 1372614 words of memory out of 3000000
- 45469 multiletter control sequences out of 15000+200000
- 562721 words of font info for 70 fonts, out of 3000000 for 9000
+ 30537 strings out of 481292
+ 591128 string characters out of 2917509
+ 1376614 words of memory out of 3000000
+ 45493 multiletter control sequences out of 15000+200000
+ 564885 words of font info for 74 fonts, out of 3000000 for 9000
  1143 hyphenation exceptions out of 8191
  72i,19n,106p,1063b,2285s stack positions out of 5000i,500n,10000p,200000b,50000s
-{C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/base/8r.enc}<C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/symbol/usyr.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmb8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmri8a.pfb>
-Output written on "c:\Users\Riccardo Degiacomi\Desktop\AEMBS\zf_aembs\ZF\document.pdf" (1 page, 282980 bytes).
+{C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/base/8r.enc}<C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/symbols/msbm10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/symbol/usyr.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmb8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmri8a.pfb>
+Output written on "c:\Users\Riccardo Degiacomi\Desktop\AEMBS\zf_aembs\ZF\document.pdf" (1 page, 376370 bytes).
 PDF statistics:
- 68 PDF objects out of 1000 (max. 8388607)
- 9 named destinations out of 1000 (max. 500000)
- 67 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 126 PDF objects out of 1000 (max. 8388607)
+ 20 named destinations out of 1000 (max. 500000)
+ 154 words of extra memory for PDF output out of 10000 (max. 10000000)
 

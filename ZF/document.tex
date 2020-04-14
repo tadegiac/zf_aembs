@@ -78,7 +78,42 @@
 	Eclipse IDE können gleich mehrere Formate gleichzeitig in eine Post-Build Step
 	erstellt werden
 	
-	\section{SW3 System}
+		\section{SW3 System}
+				\subsection{Systeme}
+				%https://www.duden.de/rechtschreibung/integral
+				Ein System ist eine Menge von interagierenden oder zusammenhängenden Einheiten, welche ein integrales Ganzes bilden.\\
+					\begin{description}
+						\item[$\bullet$ Transformierende Systeme:]%beispiel für transformierendes system?
+							\includegraphics[width=0.8\linewidth,left]{img/Transformierende_Systeme.PNG} 
+							Verarbeitet Eingabestrom in Ausgabestrom. Verarbeitet Daten typischer weise kontinuierlich.
+							\begin{equation}
+								O(s)=P(I(s))
+							\end{equation}	
+							Dabei ist $I()$ eine Eingabe Funktion, $I(s)$ ein Eingabestrom und $P(s)$ die Systemfunktion. Der Eingabestrom
+							wird von der Systemfunktion verarbeitet und erzeugt einen Ausgabestrom $O(s)$. Def. \dq Multichannel System\dq: Ein transformierendes System
+							mit mehreren Ein- und Ausgabeströmen. 
+							\begin{equation}
+								O_m(s)=P(I_n(s)) \qquad m,n \in \mathbb{R}
+							\end{equation}
+							Eigenschaften: Verarbeitungsqualität (gut oder was?), Durchsatz, Systemausnutzung. Benötigen eine gewisse Menge an Speicher. Optimiert auf
+							geringen speicherverbrauch. Konflikt mehr speicher schnellere verarbeitungszeit, aber teurer. Sind oft periodische Systeme (Datenlogger, lesen und verarbeiten Daten mit einer gewissen Periode).
+						\item[$\bullet$ Reaktive Systeme:]%bsp?								
+							Unterscheiden sich zu transformierenden Systemen dadurch, dass Sie auf Ereignisse warten. Sind typischerweise Steuer- und Regelsysteme.
+							\includegraphics[width=0.6\linewidth,left]{img/Reaktive_Systeme.PNG}
+						\item[$\bullet$ Interaktive Systeme:]
+							Stellen Schnittstelle zu Benutzer her. Auf kurze Antwortzeit und weil teuer auf hohe auslastung optimiert.
+							\includegraphics[width=0.6\linewidth,left]{img/Interaktive_Systeme.PNG} 
+					\end{description}
+		
+		\section{Synchronisation}
+				\subsection{Systeme}
+				\subsection{Handshaking}
+				\subsection{Realtime Sync.}
+				\subsection{Gadfly Sync.}
+				\subsection{Interrupt Sync.}
+				\subsection{GPIO Interrupts}
+				
+		\section{RTOS}
 
 
 
