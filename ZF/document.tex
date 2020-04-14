@@ -5,6 +5,7 @@
 %Packages sind in separaten .sty Dateine abgespeichert
 \usepackage{include/Vorlage_Cheatsheet}
 \usepackage{include/report}
+%\usepackage[margin=0.5cm]{geometry}
 
 %\setlist{leftmargin=3mm, nosep}
 
@@ -106,13 +107,20 @@
 					\end{description}
 		
 		\section{Synchronisation}
+				
 				\subsection{Systeme}
+					Computer arbeiten in ihrer eigenen Zeitdomäne. Dies führt zu synchronisationsproblemen mit der Zeitdomäne der echten welt.
+					Ein Echtzeitsystem muss die richtige Antwort zur Richtigen Zeit liefern.Timing =  Zeitverhalten, wichtiger Begriff.
+					Betrachtet man beispielsweise ein I/O System, stellt man fest, dass dieses nur korrekt funktioniert, wenn Daten zuerst eingelesen und dann gesendet werden.
+					Sendet man zu frühm, gehen daten verloren. Um dies zu bewerkstelligen muss man den Ablauf synchronisieren. Es gibt für verschiedene Probleme/Systeme unterschiedliche
+					Synchronisationsvarianten.
 				\subsection{Handshaking}
+
 				\subsection{Realtime Sync.}
 				\subsection{Gadfly Sync.}
 				\subsection{Interrupt Sync.}
 				\subsection{GPIO Interrupts}
-				
+
 		\section{RTOS}
 
 
