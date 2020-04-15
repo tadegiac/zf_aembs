@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 2.9.7300 64-bit) (preloaded format=pdflatex 2020.3.7)  14 APR 2020 14:20
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 2.9.7300 64-bit) (preloaded format=pdflatex 2020.3.7)  15 APR 2020 19:50
 entering extended mode
 **"c:/Users/Riccardo Degiacomi/Desktop/AEMBS/zf_aembs/ZF/document.tex"
 ("c:/Users/Riccardo Degiacomi/Desktop/AEMBS/zf_aembs/ZF/document.tex"
@@ -1157,7 +1157,7 @@ Underfull \hbox (badness 5652) in paragraph at lines 25--26
 []\T1/ptm/m/n/8 Verwendung wenn mehr Leis-tung ge-
  []
 
-<img/Hardware_Hierarchie.png, id=43, 651.18282pt x 347.04657pt>
+<img/Hardware_Hierarchie.png, id=59, 651.18282pt x 347.04657pt>
 File: img/Hardware_Hierarchie.png Graphic file (type png)
 <use img/Hardware_Hierarchie.png>
 Package pdftex.def Info: img/Hardware_Hierarchie.png  used on input line 32.
@@ -1172,7 +1172,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 40--41
 
  []
 
-<img/Integrated_Development_environement.png, id=45, 252.19218pt x 282.30469pt>
+<img/Integrated_Development_environement.png, id=61, 252.19218pt x 282.30469pt>
 File: img/Integrated_Development_environement.png Graphic file (type png)
 <use img/Integrated_Development_environement.png>
 Package pdftex.def Info: img/Integrated_Development_environement.png  used on input line 43.
@@ -1222,7 +1222,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 85--87
 
  []
 
-<img/Transformierende_Systeme.PNG, id=46, 544.28343pt x 168.63pt>
+<img/Transformierende_Systeme.PNG, id=62, 544.28343pt x 168.63pt>
 File: img/Transformierende_Systeme.PNG Graphic file (type png)
 <use img/Transformierende_Systeme.PNG>
 Package pdftex.def Info: img/Transformierende_Systeme.PNG  used on input line 89.
@@ -1247,7 +1247,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 98--101
 \T1/ptm/m/n/8 Eigenschaften: Ver-ar-bei-tungs-qua-li-tät (gut oder
  []
 
-<img/Reaktive_Systeme.PNG, id=47, 345.16454pt x 268.00125pt>
+<img/Reaktive_Systeme.PNG, id=63, 345.16454pt x 268.00125pt>
 File: img/Reaktive_Systeme.PNG Graphic file (type png)
 <use img/Reaktive_Systeme.PNG>
 Package pdftex.def Info: img/Reaktive_Systeme.PNG  used on input line 103.
@@ -1272,7 +1272,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 102--104
 \T1/ptm/m/n/8 scher-wei-se Steuer- und Re-gel-sys-te-me.
  []
 
-<img/Interaktive_Systeme.PNG, id=48, 415.92891pt x 264.61359pt>
+<img/Interaktive_Systeme.PNG, id=64, 415.92891pt x 264.61359pt>
 File: img/Interaktive_Systeme.PNG Graphic file (type png)
 <use img/Interaktive_Systeme.PNG>
 Package pdftex.def Info: img/Interaktive_Systeme.PNG  used on input line 106.
@@ -1297,7 +1297,7 @@ Underfull \hbox (badness 5105) in paragraph at lines 120--121
 []\T1/ptm/m/n/8 Empfänger Si-gna-li-sier-ten zu-erst dass be-reit
  []
 
-<img/Handshaking_Ablauf.PNG, id=49, 429.85594pt x 194.22563pt>
+<img/Handshaking_Ablauf.PNG, id=65, 429.85594pt x 194.22563pt>
 File: img/Handshaking_Ablauf.PNG Graphic file (type png)
 <use img/Handshaking_Ablauf.PNG>
 Package pdftex.def Info: img/Handshaking_Ablauf.PNG  used on input line 126.
@@ -1335,31 +1335,148 @@ LaTeX Font Info:    Font shape `T1/phv/m/n' will be
 (Font)              scaled to size 6.29996pt on input line 128.
  [1
 
-{C:/Users/Riccardo Degiacomi/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map} <c:/Users/Riccardo Degiacomi/Desktop/AEMBS/zf_aembs/ZF/img/Hardware_Hierarchie.png> <c:/Users/Riccardo Degiacomi/Desktop/AEMBS/zf_aembs/ZF/img/Integrated_Development_environement.png> <c:/Users/Riccardo Degiacomi/Desktop/AEMBS/zf_aembs/ZF/img/Transformierende_Systeme.PNG> <c:/Users/Riccardo Degiacomi/Desktop/AEMBS/zf_aembs/ZF/img/Reaktive_Systeme.PNG> <c:/Users/Riccardo Degiacomi/Desktop/AEMBS/zf_aembs/ZF/img/Interaktive_Systeme.PNG> <c:/Users/Riccardo Degiacomi/Desktop/AEMBS/zf_aembs/ZF/img/Handshaking_Ablauf.PNG>] [2] 
+{C:/Users/Riccardo Degiacomi/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map} <c:/Users/Riccardo Degiacomi/Desktop/AEMBS/zf_aembs/ZF/img/Hardware_Hierarchie.png> <c:/Users/Riccardo Degiacomi/Desktop/AEMBS/zf_aembs/ZF/img/Integrated_Development_environement.png> <c:/Users/Riccardo Degiacomi/Desktop/AEMBS/zf_aembs/ZF/img/Transformierende_Systeme.PNG> <c:/Users/Riccardo Degiacomi/Desktop/AEMBS/zf_aembs/ZF/img/Reaktive_Systeme.PNG> <c:/Users/Riccardo Degiacomi/Desktop/AEMBS/zf_aembs/ZF/img/Interaktive_Systeme.PNG> <c:/Users/Riccardo Degiacomi/Desktop/AEMBS/zf_aembs/ZF/img/Handshaking_Ablauf.PNG>]
+<img/gadfly_loop.PNG, id=109, 213.79875pt x 317.68687pt>
+File: img/gadfly_loop.PNG Graphic file (type png)
+<use img/gadfly_loop.PNG>
+Package pdftex.def Info: img/gadfly_loop.PNG  used on input line 212.
+(pdftex.def)             Requested size: 98.99998pt x 147.10237pt.
+<img/gadfly_zustandsdiagramm_device.PNG, id=110, 482.55281pt x 232.24266pt>
+File: img/gadfly_zustandsdiagramm_device.PNG Graphic file (type png)
+<use img/gadfly_zustandsdiagramm_device.PNG>
+Package pdftex.def Info: img/gadfly_zustandsdiagramm_device.PNG  used on input line 213.
+(pdftex.def)             Requested size: 98.99998pt x 47.64548pt.
+<img/interruptsync_1.PNG, id=111, 588.32297pt x 95.6072pt>
+File: img/interruptsync_1.PNG Graphic file (type png)
+<use img/interruptsync_1.PNG>
+Package pdftex.def Info: img/interruptsync_1.PNG  used on input line 236.
+(pdftex.def)             Requested size: 98.99998pt x 16.08815pt.
+<img/interruptsync_2.PNG, id=112, 602.25pt x 200.62453pt>
+File: img/interruptsync_2.PNG Graphic file (type png)
+<use img/interruptsync_2.PNG>
+Package pdftex.def Info: img/interruptsync_2.PNG  used on input line 239.
+(pdftex.def)             Requested size: 98.99998pt x 32.97916pt.
+<img/interruptsync_3.PNG, id=113, 431.73798pt x 248.42813pt>
+File: img/interruptsync_3.PNG Graphic file (type png)
+<use img/interruptsync_3.PNG>
+Package pdftex.def Info: img/interruptsync_3.PNG  used on input line 243.
+(pdftex.def)             Requested size: 98.99998pt x 56.96289pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 233--245
+[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 233--245
+\T1/ptm/m/n/8 In-ter-rupts sind in die Lo-gik der Hard-wa-re
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 233--245
+\T1/ptm/m/n/8 wusst ist, dass beim aus-lö-sen ei-nes In-ter-
+ []
+
+
+Underfull \hbox (badness 7963) in paragraph at lines 233--245
+\T1/ptm/m/n/8 al-le Co-re-re-gis-ter auf dem Stack ge-spei-chert
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 233--245
+\T1/ptm/m/n/8 Pro-gram-mie-rer oder der Com-pi-ler die Sta-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 233--245
+\T1/ptm/m/n/8 tus-ret-tung der be-trof-fe-nen Re-gis-ter er-mög-
+ []
+
+
+Underfull \hbox (badness 6758) in paragraph at lines 233--245
+\T1/ptm/m/n/8 ter-rupts ist ato-mar, al-so oh-ne un-ter-bre-chung
+ []
+
+LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 302.
+("C:\Program Files\MiKTeX 2.9\tex/latex/psnfss\ts1ptm.fd"
+File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
+)
+LaTeX Info: Symbol \textasciidieresis not provided by
+            font family ptm in TS1 encoding.
+            Default family used instead on input line 314.
+ [2 <c:/Users/Riccardo Degiacomi/Desktop/AEMBS/zf_aembs/ZF/img/gadfly_loop.PNG> <c:/Users/Riccardo Degiacomi/Desktop/AEMBS/zf_aembs/ZF/img/gadfly_zustandsdiagramm_device.PNG> <c:/Users/Riccardo Degiacomi/Desktop/AEMBS/zf_aembs/ZF/img/interruptsync_1.PNG> <c:/Users/Riccardo Degiacomi/Desktop/AEMBS/zf_aembs/ZF/img/interruptsync_2.PNG> <c:/Users/Riccardo Degiacomi/Desktop/AEMBS/zf_aembs/ZF/img/interruptsync_3.PNG>]
+Underfull \hbox (badness 10000) in paragraph at lines 318--320
+[]\T1/ptm/m/n/8 Von har-ter Echt-zeit
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 360--370
+\T1/ptm/m/n/8 FreeRTOS hat sei-ne of-fi-zi-el-le Web Sei-te auf
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 381--384
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 385--387
+
+ []
+
+LaTeX Info: Symbol \textasciidieresis not provided by
+            font family ptm in TS1 encoding.
+            Default family used instead on input line 392.
+<img/FreeRTOS_Achitecture.PNG, id=215, 314.29922pt x 314.29922pt>
+File: img/FreeRTOS_Achitecture.PNG Graphic file (type png)
+<use img/FreeRTOS_Achitecture.PNG>
+Package pdftex.def Info: img/FreeRTOS_Achitecture.PNG  used on input line 428.
+(pdftex.def)             Requested size: 98.99998pt x 98.99997pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 427--430
+[]\T1/ptm/m/n/8 Das Be-triebs-sys-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 427--430
+\T1/ptm/m/n/8 tem be-nö-tigt le-dig-lich 10 sour-ce fi-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 427--430
+\T1/ptm/m/n/8 les und die ent-spre-chen-den Hea-der-fi-les.
+ []
+
+[3 <c:/Users/Riccardo Degiacomi/Desktop/AEMBS/zf_aembs/ZF/img/FreeRTOS_Achitecture.PNG>]
+<img/ARM_Interrupt_Priorities.PNG, id=261, 558.21046pt x 297.36093pt>
+File: img/ARM_Interrupt_Priorities.PNG Graphic file (type png)
+<use img/ARM_Interrupt_Priorities.PNG>
+Package pdftex.def Info: img/ARM_Interrupt_Priorities.PNG  used on input line 469.
+(pdftex.def)             Requested size: 98.99998pt x 52.73769pt.
+ [4 <c:/Users/Riccardo Degiacomi/Desktop/AEMBS/zf_aembs/ZF/img/ARM_Interrupt_Priorities.PNG>] 
 AED: lastpage setting LastPage
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 179.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 179.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 491.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 491.
 ("c:\Users\Riccardo Degiacomi\Desktop\AEMBS\zf_aembs\ZF\document.aux")
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 179.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 179.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 491.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 491.
 Package rerunfilecheck Info: File `document.out' has not changed.
-(rerunfilecheck)             Checksum: 27ED0548377D7EBD791D8ACBB83902E1;573.
+(rerunfilecheck)             Checksum: F1BEBA930AEE2B779816BCD8ADCDB57E;819.
 Package logreq Info: Writing requests to 'document.run.xml'.
 \openout1 = `document.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 32361 strings out of 481292
- 615160 string characters out of 2917509
- 1469041 words of memory out of 3000000
- 47260 multiletter control sequences out of 15000+200000
- 572762 words of font info for 81 fonts, out of 3000000 for 9000
+ 32668 strings out of 481292
+ 620578 string characters out of 2917509
+ 1602041 words of memory out of 3000000
+ 47417 multiletter control sequences out of 15000+200000
+ 574177 words of font info for 84 fonts, out of 3000000 for 9000
  1143 hyphenation exceptions out of 8191
- 72i,19n,106p,1063b,2281s stack positions out of 5000i,500n,10000p,200000b,50000s
-{C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/base/8r.enc}<C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/symbols/msbm10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/courier/ucrr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/helvetic/uhvr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/symbol/usyr.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmb8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmri8a.pfb>
-Output written on "c:\Users\Riccardo Degiacomi\Desktop\AEMBS\zf_aembs\ZF\document.pdf" (2 pages, 510971 bytes).
+ 72i,20n,106p,1063b,2281s stack positions out of 5000i,500n,10000p,200000b,50000s
+ <C:\Users\Riccardo Degiacomi\AppData\Local\MiKTeX\2.9\fonts/pk/ljfour/jknappen/ec/dpi600\tcrm0800.pk>{C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/base/8r.enc}<C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/symbols/msbm10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/courier/ucrr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/helvetic/uhvr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/symbol/usyr.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmb8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmri8a.pfb>
+Output written on "c:\Users\Riccardo Degiacomi\Desktop\AEMBS\zf_aembs\ZF\document.pdf" (4 pages, 948943 bytes).
 PDF statistics:
- 157 PDF objects out of 1000 (max. 8388607)
- 49 named destinations out of 1000 (max. 500000)
- 111 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 357 PDF objects out of 1000 (max. 8388607)
+ 186 named destinations out of 1000 (max. 500000)
+ 178 words of extra memory for PDF output out of 10000 (max. 10000000)
 

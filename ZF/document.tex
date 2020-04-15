@@ -1,7 +1,7 @@
 
 % extarticle -> kleiner Schriftgrösse
 \documentclass[a4paper, 8pt]{extarticle}
-
+%\usepackage[ansinew]{inputenc} würde umlaute ermöglichen, clashed aber mit babel package :()
 %Packages sind in separaten .sty Dateine abgespeichert
 \usepackage{include/Vorlage_Cheatsheet}
 \usepackage{include/report}
@@ -41,7 +41,7 @@
 			\end{description}
 
 	\includegraphics[width=0.9\linewidth,left]{img/Integrated_Development_environement}
-		\section{SW2 Software und Device Treiber}
+	\section{SW2 Software und Device Treiber}
 			\subsection{Device Driver}
 				\begin{description}
 					\item[$\bullet$ Interface:] Abstrahiert von Hardware. Sollte einfach und verständlich sein
@@ -79,7 +79,7 @@
 	Eclipse IDE können gleich mehrere Formate gleichzeitig in eine Post-Build Step
 	erstellt werden
 	
-		\section{SW3 System}
+	\section{SW3 System}
 				\subsection{Systeme}
 				%https://www.duden.de/rechtschreibung/integral
 				Ein System ist eine Menge von interagierenden oder zusammenhängenden Einheiten, welche ein integrales Ganzes bilden.\\
@@ -106,7 +106,7 @@
 							\includegraphics[width=0.6\linewidth,left]{img/Interaktive_Systeme.PNG} 
 					\end{description}
 		
-		\section{Synchronisation}
+	\section{SW4 Synchronisation}
 					\begin{description}
 						\item[$\bullet$ Systeme]
 							Computer arbeiten in ihrer eigenen Zeitdomäne. Dies führt zu synchronisationsproblemen mit der Zeitdomäne der echten welt.
@@ -143,29 +143,341 @@ void read(void){
 							\end{lstlisting} 	
 							i initialisieren für Arraylänge, also Bitlänge. PortB als Output definieren, Was macht dieses struct? In der For Schlaufe wird B0 kurz auf high und dann auf Low gesetzt.
 							Es wird also ein sehr kurzer Puls ausgesendet (woher weiss ich wie lange der Puls andauert?).Danach wird dann jeweils eine kurze Zeit gewatet, Befor dann die Daten des Port A
-							eingelesen werden.
+							eingelesen werden. Welche Rolle hat hier PORTA, ist das die Schnittstelle wo informationen empfangen werden?
 							\begin{lstlisting}
 void read(void){
 	size_t i;
 
-	PORTB.DDR1 = 1;
-	PORTB.B1 = 1;
+	PORTB.DDR1 = 1;/*pin B1 as output pin*/
+	PORTB.B1 = 1;/*B1 initially high*/
 	for(i=0; i<sizeof(buffer); i++){
-		PORT.B1=0;
+		PORT.B1=0;/*initiate handshaking with setting B1 low*/
 		while(!PORT.B0){}
-		while(PORT.B0){}
+		while(PORT.B0){}/*synchronize*/
 		buffer[i]=PORTA;
-		PORTB.B1=1;
+		PORTB.B1=1;/*end handshake*/
 	}
 }
 							\end{lstlisting}
+							Das Programm ist eine Erweiterung des ersten. B1 wird auf 1 gesetzt. Daten sollen nicht gesendet werden. Danach wird B1 auf 0 gesetzt.
+							Daten sollen empfangen werden.Solange B0 auf 0 ist soll gewartet werden. Wenn B0 auf 1 geht soll gewaret werden, bis B0 wieder auf 1 ist.
+							Es soll also gewartet werden, bis ein Puls von B0 gesendet und empfangen wurde. Danach wird in das Array geschrieben. Aber ich verstehe nicht weshalb B0 nicht 
+							nochmals in diesem codebeispiel implementiert wurde. Man müsste schon die beide Beispiele irgendwie vereinen, oder? Und wird jetzt für jedes Zeichen das gesendet
+							wird, ein Puls ausgesendet? Wie wird geregelt, dass das richtige bit eingelesen wird beim lochkarten beispiel?Wie könnte die Synchronisation beim lochkarten beispiel
+							in pseudocode aussehen?
+						\item[$\bullet$ Realtime Synchronisation]
+							Ist ein Weg ein Programm zu verzögern. Die Methode heisst Realtime weil sie eine Echte Zeit wartet um zu synchronisieren.
+							\begin{lstlisting}
+void read(void){
+	size_t i;
 
-						\item[$\bullet$ Handshaking]
+	for(i=0; i<sizeof(buffer); i++){
+		for(int j=0; j<10000; j++){
+			/*wait some time*/
+		}
+		buffer[i]=PORTA;
+	}
+}								
+							\end{lstlisting}
+							Bei diesem Programm beispiel wird in der äusseren for-Schleife jeweils in das Array geschrieben. Diese zu durchlaufen benötigt
+							Zeit. Diese Zeit ist inhärent. Die innere Schleife dient dazu explizit Zeit zu verbraten, diese Zeit nennt man explizit. Die innere
+							Schleife gibt dem PortA etwas mehr Zeit etwas in den Buffer zu schreiben. Ist die Wartezeit an die Geschwindigkeit des Motors angepasst
+							so kann man erfolgreich Daten einlesen. Das Beispiel unten wäre eine noch verfeinerte Variante.
+							\begin{lstlisting}
+void read(void){
+	size_t i;
 
+	for(i=0; i<sizeof(buffer); i++){
+		for(int j=0; j<10000; j++){
+			--asm("nop")
+		}
+		buffer[i]=PORTA;
+		}
+}																
+							\end{lstlisting}
+							Man kann auch einfach eine Wartefunktion mit einem Timer erstellen und diese verwenden.
+							\begin{lstlisting}								
+void read(void){
+	size_t i;
 
+	for(i=0; i<sizeof(buffer); i++){
+		WaitMs(500):
+		buffer[i]=PORTA;
+	}
+}
+							\end{lstlisting}							
+						\item[$\bullet$ Gadfly Synchronisation aka Polling]
+							Bei der Realtimesynchronisation wartet man länger als nötig, bei der Gadfly synchronisation wird dies vermieden.
+							Man überprüft periodisch einen Zustand und fährt
+							\includegraphics[width=0.6\linewidth,left]{img/gadfly_loop.PNG}
+							\includegraphics[width=0.6\linewidth,left]{img/gadfly_zustandsdiagramm_device.PNG}
+							Codebeispiel Gadfly für Lochkartenleser:
+							\begin{lstlisting}
+void read(void) {
+	size_t i;
+
+	for(i=0; i<sizeof(buffer); i++){
+		while(!PORTB.B0){
+		/*solange eine Null anliegt wird gewartet
+		Null=kein Loch*/						
+		}
+		buffer[i]=PORTA;
+		while(PORTB.B0){
+		/* es wird gewartet bis wieder eine Null kommt 
+		also bis das Loch den Sensor ueberquert hat */						
+		}
+	}
+							\end{lstlisting}  
+							Hier wird gleich zweimal mit Gadfly synchronisiert, oder?
+						\item[$\bullet$ Gadfly Synchronisation aka Polling]
+							Realtimesync. und Gadflysync. haben den Nachteil, dass diese Rechenzeit auf der CPU oder der MCU verwenden.
+							Die Interruptsync. umgeht dieses Problem. Die idee ist, dass man eine Anfrage startet und dann asynchron benachrichtigt 
+							wird.
+							\includegraphics[width=0.6\linewidth,left]{img/interruptsync_1.PNG}
+							Interrupts sind in die Logik der Hardware eingebaut. Es ist wichtig dass man sich bewusst ist, dass beim auslösen 
+							eines Interrupts etliche operationen automatisiert ablaufen.
+							\includegraphics[width=0.6\linewidth,left]{img/interruptsync_2.PNG}
+							Zudem ist es wichtig zu wissen, dass nicht alle Coreregister auf dem Stack gespeichert werden können. Dies hat zur Folge dass
+							der Programmierer oder der Compiler die Statusrettung der  betroffenen Register ermöglicht wird.  Das eintreten und Verlassen der Interrupts 
+							ist atomar, also ohne unterbrechung
+							\includegraphics[width=0.6\linewidth,left]{img/interruptsync_3.PNG}
+							Beispiel Code für Parkticket leser. 
+							\begin{lstlisting}
+volatile bool isrFlag=false;
+void GPIO_ISR(void){
+	AcknowledgeInterrupt
+	isrFlag=true;
+}
+
+void read(void){
+	size_t i;
+
+	isrFlag=false;
+	ConfigureGPIO(rising_edge);
+	EnableInterrupt(gpio_isr);
+	for(i=0; i<sizeof(buffer); i++){
+		while(!isrFlag){};
+		buffer[i]=PORTA;
+		isrFlag=false;
+	}
+}
+							\end{lstlisting} 	
+							Es kann nur in den Buffer geschrieben werden sobald ein Interrupt ausgelöst wurde. Die interruptroutine setzt einfach das isrFlag auf true.
+							In C und C++ spezifiziert volatile, dass sich der Wert der Variable jederzeit ohne expliziten Zugriff im Quelltext ändern kann.	Zudem verhindert volatile 
+							dass die Variable vom Compiler wegoptimiert wird. Das Programm greift somit immer auf den in der Hardware vorhandenen Wert zu. Daher kann diese Variable
+							dazu verwendet werdenm, den Prozess zu synchronisieren. Wichtig ist, die ISR sollte allgemein immer sehr schnell abgearbeitet werden, damit diese
+							Keine anderen ISR mit tieferer Priorität blockiert.	Wenn ich nicht in der Interrupt Routine etwas mache, sondern nur ein Flag setze, wo 
+							ist dann der Unterschied zum Polling?
+						\item[$\bullet$ GPIO Interrupts]
+							Mit dem Software Development Kint (SDK) kann man Interrupts auch auf den GPIOs verwenden. Man muss dazu den Pin bzw. ein GPIO Port 
+							auf Input schalten und die ISR definieren. Der Code Hierfür könnte wie folgt aussehen:
+							\begin{lstlisting}
+void PORTB_IRQHandler(void){
+	GPIO_PortClearInterruptFlags(BOARD_BUTTON_DOWN_GPIO, 1U<<BOARD_BUTTON_DOWN_PIN);
+}
+
+void main(void){
+	gpio_pin_config_t sw_config = {
+		kGPIO_DigitalInput, 0,	
+		};
+		GPIO_pinInit(BOARD_BUTTON_DOWN_GPIO, BOARD_BUTTON_DOWN_PIN, & sw_config);
+		PORT_SetPinInterruptConfig(BOARD_BUTTON_DOWN_PORT, BOARD_BUTTON_DOWN_PIN, kPORT_InterruptFallingEdge);
+		EnableIRQ(PORTB_IRQn);
+}
+							\end{lstlisting} 	
 					\end{description}
+	\section{SW5 RTOS}
+		Um Echtzeitbedingungen einhalten zu können, benötigt man ein RTOS. Weiterhin kann man mit Hilfe eines RTOS das System erweitern ohen die 
+		Komnplexität massiv zu erhöhen (Skalierbarkeit).
+				\begin{description}
+					\item[$\bullet$ Realität]
+						Def: Echtzeit-Systeme können für die echte Welt benutzt wreden.
+						Echtzeit ist eine Anforderung an ein System. Diese Anforderung kann an alle Systemklassen (transformierend, reaktiv und interaktiv)
+						gestellt werden.
+					\item[$\bullet$ Rechtzeitigkeit]
+						Ein Rechnersystem unterscheidet zu anderen Systemen. Ein Rechner ist getaktet und alles passiert synchron mit dem Clock. 
+						Ein Rechnersystem ist über Aktuatoren und Sensoren mit der echten Welt verbunden. 
+						Ein Echtzeitsystem muss zur richtigen Zeit agieren können (Richtigzeit wäre besser). Was richtig ist, hängt von der Anwendung ab.
+						\begin{itemize}
+							\item Absolute Rechtzeitigkeit Einschalten der Bewässerung jeden Tag zur gleichen Zeit 
+							\item Nachdem festgestellt wurde, dass der Gartenboden trocken ist, soll in der darauf folgenden Nacht zum Zeitpunkt
+							xy die bewässerung für eine gewisse Zeitspanne laufen. 
+						\end{itemize}
+					\item[$\bullet$ Echtzeit für Rechner]
+						Ein echtzeit System muss zur richtigen Zeit das Richtige tun.
+					\item[$\bullet$ Echtzeit für Rechner]
+						 Ein Echtzeitsystem ist ein System, dessen Richtigkeit der Berechnungen nicht nur von der Logischen korrektheit der Rechnung
+						 abhängt, sondern auch vom Zeitpunkt zudem die Rechnung produziert wurde. Wenn die zeitlichen Rahmenbedingungen nicht eingehalten werden
+						 können, so spricht man von einem System Fehler. Das bedeutet also, dass man beweisen muss, dass das richtige Resultat zur richtigen Zeit
+						 aufgetreten ist. Wichtig, die Geschwindigkeit eines Rechners ist nicht konstant. Ein Computer ist als Echtzeitsystem klassifiziert, wenn er
+						 auf externe Ereignisse in der echten Welt reagieren kann: mit dem richtigen
+						 Resultat, zur richtigen Zeit, unabh¨angig der Systemlast, auf eine deterministische und vorhersehbare Weise. Dies kann man nur sicherstellen wenn 
+						 man zu jedem möglichen Zeitpunkt mit den jeweils gegenwärtigen Informationen des Systemzustandes bestimmen kann, was der nächste Systemzustand sein wird.
+						 Problematisch ist dabei, dass wenn ein Prozess die Zeitbedingung nicht einhalten kann, das ganze System diese dann auch nicht einhalten kann.s
+					\item[$\bullet$ Harte und weiche Echtzeit]
+						Von harter Echtzeit spricht man, wenn durch das Nichteinhalten der Zeitvorgabe das System als nicht Funktionsfähig deklariert wird. Bei weicher 
+						Echtzeit führt ein Nichteinhalten der Zeitvorgabe zu einer Degradierung.(Bsp. Video Encoder)
+					\item[$\bullet$ Periodische Echtzeit]
+						Ist das Verwendete System sehr schnell, so kann man verschiedene Dinge quasi gleichzeitig erledigen.
+							\begin{lstlisting}
+for (;;) {
+	if ( time ==530) { /* start at 05:30 am */
+		StartIrrigation () ; /* turn relay on */
+	} else if ( time ==535) { /* stop at 05:35 am */
+		StopIrrigation () ; /* turn relay off */
+}
+							\end{lstlisting}
+						Da dies einen $\mu C$ kaum auslastet, kann man noch weitere Funktionen einfügen.
+							\begin{lstlisting}
+for (;;) {
+	if ( time ==530) { /* start at 05:30 am */
+		StartIrrigation () ; /* turn relay on */
+		}
+	if ( time >530 && time <535) { /* irrigate from 05:30 am to 05:35 am */
+/* control the water pump , needs to be called every 10 ms: */
+		ControlIrrigation () ;
+		WaitMs (5) ; /* wait 5 ms ( additional 5 ms will be added ) */
+	}
+	MeasureHumidity () ; /* needs to be called every 5 ms */
+	WaitMs (5) ;
+	if ( time ==535) { /* stop at 05:35 am */
+		StopIrrigation () ; /* turn relay off */
+	}
+}
+							\end{lstlisting} 						
+				\end{description}
+		\section{SW6 FreeRTOS}
+			\subsection{FreeRTOS Lizenz}
+				War zu Beginn unter modifizierter GNU GNU Public License erhältlich. Nach Übernahme von Amazon wurde diese aber
+				in eine MIT Lizenz umgewandelt.
+				\begin{itemize}
+					\item Keine Kostenfolge
+					\item Keine Einschränkungen
+					\item Kann: Kopieren, ändern, einbinden, publizieren, berteilen, sublizenzieren, verkaufen
+					\item Copyright und Bedingungen müssen unverändert weitergegeben werden
+				\end{itemize}
+			\subsection{Distributionen}
+			FreeRTOS hat seine offizielle Web Seite auf http://www.freertos.org und kann
+			von dort auch heruntergeladen werden. Abbildung 5.6 zeigt die "ubliche Struktur
+			der Dateien. FreeRTOS und seine Dateien ist auch auf SourceForge oder seit
+			2020 auch auf GitHub verfügbar.
+			Von der Hochschule Luzern ist eine Portierung von FreeRTOS im McuOnEclipse SourceForge Projekt verf"ugbar. Dies ist eine Version welche im gleichen 
+			Port mehrere Mikrocontroller Architekturen unterstutzt (S08, S12(X), S12X,
+			phische Konfiguration mittels Processor Expert (Abbildung 5.8. Diese Version
+			verf"ugt "uber eine Shell, Low Power Timer und Tickless Idle Unterst"utzung mit
+			zus"atzlichen RTOS Tracing Funktionen wie z.B Percepio Tracealizer und Segger
+			SystemViewer. Eine Version ohne Processor Expert ist auf GitHub im McuOnEclipseLibrary Projekt verf"ugbar.
+			\subsection{Architektur}
+				\begin{description}
+					\item[$\bullet$ Philosophie]
+						Der Kernel ist sehr klein und benötigt nur wenige Dateien.Ist überwiegend in C formuliert, teile des Interrupthandlings
+						sind in Assembler.Kann auch mit einer Anwendung in C++ benutzt werden(was heisst das?).Der Kernel ist statisch konfiguriert.
+						Dies bedeutet, dass sich die meisten Einstellungen in einer HeaderDatei (FreeRTOSConfig.h) modifizieren lassen.	Dies bedeutet, dass der 
+						Kernel statisch auf die Anwendung abgestimmt ist(Wicht wie beispielsweise eine Library).
+						\begin{itemize}
+							\item Preemtive Scheduling 
+								Es Läuft immmer der Task mit der höchsten Priorität. Tasks mit gleicher Priorität teilen sich die Rechenzeit
+								(fully preemptive with round robin time slicing-> alte was?) 
+							\item Cooperative Scheduling 
+								Ein Kontext Switch (Was isch en kontegschd switsch?) findet nur statt wenn ein Task blockiert oder explizit ein ’Yield’ aufruft. Ein ’Yield’ ist die Auforderung an
+								den Kernel, einen Kontext Switch vorzunehmen.\\
+						\end{itemize}
+						Der Kernel benötigt im Prinzip nur zwei Interrupt arten:\\
+						\begin{itemize}
+							\item Tick Interrupt
+								einen periodischen Interrupt welcher einen Kontext
+								Switch (Preemption) ausl"osen kann und welcher dazu dient, einen Z"ahler
+								(Tick Counter) fur die Zeitbasis nachzuf"uhren. Für Cortex-M ist dies meis der SysTick.
+							\item Software Interrupt 
+								ein interrupt welcher vom Kernel ausgel¨ost werden
+								kann um einen Kontext Switch zu veranlassen.	 
+						\end{itemize}
+						Der Tick Interrupt wird als timing base genutzt. Der Kernel zählt nicht in Sekunden, sondern in Ticks. Mit dem TickInterrupt kann man eine
+						beliebeige Zeitverzögerung generieren. Wenn Beispielsweise ein Tickinterrupt 10 millisekunden benötigt und man möchte einen Task um 500 Millisekunden 
+						verzögern, dann benötigt der Kernel 50 Ticks. Das Tickinterrupt beeinflusstdas timing des ganzen kernels. Typische tickinterrupt perioden sind 10ms oder 1ms 
+						.Eine  schnellere tickinterrupt periode erhöht die Interruptload auf ein System, dies ist zu berücksichtigen. FreeRTOS unterstützt eine Tickinterrupt Periode
+						von bis zu 1kHz. FreeRTOS hat immer einen Laufenden Task, den IDLE Task.RTOS verwendet normale globale variablen für den eigenenen 
+						state und den kernel. Für die Liste der verfügbaren task descriptors werden globale pointer genutzt. Alle anderen dynamischen Daten die zur Laufzeit erzeugt 
+						werden, sind im Heap. Der heap ist ein memorypool um speicher zur laufzeit dynamisch zu allozieren. Die Taskpriorität nimmt nimmt mit zunehmenden Zahlen zu. Der IDLE
+						TASK wäre dementsprechend 0. Es ist Möglich Tasks zur Laufzeit zu erstellend und löschen. Jeder Task hat seinen eigenen context, stack und stack variablen.
+						Auf den Cortex-M modellen wird der Main Stack Pointer für die interrupts verwendet, und der Process Stack Pointer für die Tasks verwendet. Das Betriebssystem
+						verwendet softwareinterrupts um zwischen tasks zu wechseln. Task stacks sind designed wie interrupt stacks. Wird also ein neuer Task gestartet, geschieht dies gleich
+						wie beim Rückkehren eines Interrupts (was auch immer das heissen soll). Tasks laufen typischer weise in einer endlos for-Schleife.
+							\begin{lstlisting}
+static void MyTask ( void * params ) {
+	( void ) params ; /* not used */
+	for (;;) {
+		/* do the work here ... */
+	} /* for */
+	/* never return */
+}
+							\end{lstlisting} 
+						Tasks laufen bis sie von einem anderen Task beendet werden. Die einzige ausnahme ist wenn sich ein Task selbst beendet.
+							\begin{lstlisting}
+static void SuicideTask ( void *params ) {
+	( void ) params ; /* not used */
+	/* do the work here */
+	vTaskDelete ( NULL ); /*killing myself*/
+	/*won't get here since i am dead :D*/
+}
+							\end{lstlisting} 
+						RTOS wird mit $vTaskStartScheduler()$ gestartet. Diese Funktion kreiert dann auch gleich den IDLE task. Der IDLE task hat die Priorität $tskIDLE_PRIORITY$,
+						also null und führt unterhaltungs und instandhaltungs aufgaben aus für den Kernel.
+					\item[$\bullet$ Block Diagramm]
+						Das Betriebssystem benötigt lediglich 10 source files und die entsprechenden Headerfiles.
+						\includegraphics[width=0.6\linewidth,left]{img/FreeRTOS_Achitecture.PNG}			
+						\begin{itemize}
+							\item FreeRTOSconfig ist ein header file mit makros zur Konfiguration der Einstellungen des Betriebssystems.
+							\item croutine implementiert Co-Routinen support in croutine.c. Co-routinen sind mini-threads welche denselben Task teilen.
+							\item  event\_groups impementieren support für event flags in event\_group.c 
+							\item list in list.c implementiert ein list handling welches intern von RTOS genutzt wird (BSP. für eine liste wartender objekte)
+							\item queue ist ein modul welches die queue, semaphore und mutex unterstützung(WTF?) implementiert
+							\item timer wwird genutzt um die timer zu implementieren (timer.c).
+							\item task implementiert den scheduler in task.c
+							\item heap ist ein heap manager und heap speicher. Es werden verschiedene implementationsvarianten angeboten (heap\_1.c, heap\_2.c ...)
+							\item Port implementiert RTOS für eine bestimmte architektur, Mikrocontroller und toolchain. Port ermöglicht RTOS den zugang zu Hardware
+								  Funktionalitäten. Enthält implemenation Tickinterrupt und SoftwareInterrupt.
+							\item Zusätzlich gibt es noch middleware für FreeRTOS (unter einer anderen Lizenz). Beispielsweise Trace,file systems, oder commmand line interface (CLI)
+						\end{itemize}	
+					\item[$\bullet$ Kernel und Interrupts]
+							Da interrupts zu jeder Zeit eintreten können, muss speziel darauf geachtet werden, dass routinen ablaufinvariant implementiert werden.
+							RTOS Kernel "ubernimmt nur 2 Interrupts(SoftwareInterrupt=SVCall und PendableSrvReq, Tick interrupt = SysTick on ARM) alle anderen Interrupts werden
+							von den Programmen ausgeführt?. Das RTOS Application Programming Interface (API) kann ebenfalls von einer ISR aufgerufen werden. Viele FreeRTOS ports erlauben es den 
+							Kernel mit einem Interrupt zu unterbrechen. Waraum auch immer macht dies den Kernel effizienter und verringert die interrupt verzögerungszeit. Es ist nicht erlaubt
+							die RTOS API aus einem Interrupt heraus aufzurufen. Die einzige Aunahme gilt für API funktionen die so aussehen xTaskGetTickCountFromISR, das FromISR ist die ausnahme.
+							also de abschnitt peili nit würkli....
+							\begin{lstlisting}
+TickType_t xTaskGetTickCountFromISR ( void )
+{
+	TickType_t xReturn ;
+	UBaseType_t uxSavedInterruptStatus ;
+	portASSERT_IF_NTRPT_PRITY_NVALD () ;
+	uxSavedInterruptStatus =
+		prtTCK_TYPE_SET_NTRPT_MSK_FM_ISR () ;		
+	{
+		xReturn = xTickCount ;
+	}
+	prtTCK_TYPE_CLR_NTRPT_MSK_FRM_ISR (
+		uxSavedInterruptStatus );
+	return xReturn ;
+}
+							\end{lstlisting} 
+					\item[$\bullet$ ARM Cortex-M Interrupts]
+							Um den Kernel effizient zu gestalten, wird angenommen, dass keine anderen Threads oder Interrupts zugriff auf den Kernel
+							haben, also Kernel Routinen aufrufen (aber möglich ist es schon, oder?). Beim Cortex M4 gibt es eine BASEPRI(nicht bei Cortex M0+) Register, welches
+							zum maskieren benutzt wird (ich glaube zum Maskieren der Interruptpriority?).
+							\includegraphics[width=0.6\linewidth,left]{img/ARM_Interrupt_Priorities.PNG}
+							Aus irgend einem Grund ist es wichtig, dass Systick und PendSV mit der geringsten Dringlichkeit agieren. Die applikations taskshaben virtuell
+							auch die geringste priorität(ok demfall?). Daher können diese auch jeder Zeit von jedem Interrupt unterbrochen werden (isch glaub guet demfall).
+							Wen der Interrupt für den Kernel ist (SysTick oder PendSV -> hä?) dann wird der kernel allen interrupts sofort den max Syscall Interrupt Priority zuweisen.
+							Dann wird der Kernel nicht von den weniger stark priorisierten Interrupts belästigt( aber welche interrupts erhalten denn jetzt diese Prio?). Zusätzlich dazu 
+							vereinfacht dann dies die reentrancy des Kernelcodes. Wieso? sobald der Kernel die BASEPRI interrupt Blockierung aktiviert hat,  ist der Kernel von Aufrufen durch fromISR()
+							und anderen RTOS API aufrufen geschützt (hä? was? ok...). Allerdings heisst das aber, dass Interrupt mit einer höheren Prio als der max Syscall Interrupt Priority den Kernel 
+							unterbrechen können (also die Ausführung dessen Codes) und nicht von dessen Verzögerung beeinträchtigt sind. Warum auch immer bedeutet das, dass solche interrupts nicht  
+							einfach alle RTOS API funktionen verwenden können.... nüt hani verstande.
 
-		\section{RTOS}
+
+				\end{description}
 		
 
 
