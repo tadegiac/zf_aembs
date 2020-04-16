@@ -475,13 +475,248 @@ TickType_t xTaskGetTickCountFromISR ( void )
 							und anderen RTOS API aufrufen geschützt (hä? was? ok...). Allerdings heisst das aber, dass Interrupt mit einer höheren Prio als der max Syscall Interrupt Priority den Kernel 
 							unterbrechen können (also die Ausführung dessen Codes) und nicht von dessen Verzögerung beeinträchtigt sind. Warum auch immer bedeutet das, dass solche interrupts nicht  
 							einfach alle RTOS API funktionen verwenden können.... nüt hani verstande.
-
-
 				\end{description}
-		
-
-
-
+			\subsection{Tasks}	
+				\begin{description}
+					\item[$\bullet$ Priority-based Preemptive Scheduling]
+						FreeRTOS kann für zwei verschiedene scheduling modes konfiguriert werden. Dies wird vom konfigurationsmakro config\_USE\_PREEMPTION 
+						kontrolliert?
+						\begin{itemize}
+							\item Preemptive Scheduling: Der Scheduler hat die Kontrolle über die CPU und kann laufende Tasks abbrechen.
+							\item Cooperative Scheduling: Der Task behält kontrolle über die CPU bis er diese wieder an den Scheduler zurück gibt.
+						\end{itemize}
+						FreeRTOS verwendet ein Prioritäten basierendes Preemptive Scheduling. Das bedeutet, dass der Scheduler immer den ready task mit der 
+						höchsten Priorität "laufen" lässt. Es muss aufgepasst werden, dass die tasks mit tiefer Priority auch zum zug kommen (ja und wie macht man 
+						das?).
+						\includegraphics[width=0.6\linewidth,left]{img/Prioritybased_preemptive_scheduling.PNG}
+						Jeder Task hat eine Priorität (0 bis config-MAX\_PRIORITIES - 1). Das Makro config-MAX\_PRIORITIES ist definiert in FreeRTOSConfig.h.
+						Falls mehrere Tasks mit gleicher Priorität zur gleichen Zeit gelöst werden sollen, wird der Scheduler time-slicing andwenden (dies wird im file
+						configUSE\_TIME\_SLICING kontrolliert) und allen Tasks
+						gleich viel Rechenzeit gewährleisten.
+					\item[$\bullet$ Task States]
+						In FreeRTOS kan jeder der tasks in einem der folgenden Zustände sein:
+							\begin{itemize}
+								\item Running: Der Task wird auf der CPU ausgeführt. Es kann nur ein Task auf einmal ausgeführt werden.
+								\item Suspended: Der Task muss nichts ausführen, der task schläft.
+								\item Ready: Der Task ist bereit für die Ausführung (nicht suspended oder blocked), wurde noch nicht vom Scheduler zum Ausführen gebracht
+								\item Blocked: Der Task ist blockiert, wartet also auf ein Objekt oder ein Event.
+							\end{itemize}
+							\includegraphics[width=0.6\linewidth,left]{img/Task_State_transistions.PNG}
+					\item[$\bullet$ Time Slicing]  
+						Falls configUSE\_TIME\_SLICING nicht definiert ist oder auf 1 gesetzt ist, dann wird FreeRTOS standardmässig time slicing zwischen tasks verwenden. 
+						RTOS wird also den ready Task mit der höchsten Priorität starten. CPU Zeit wird zwischen den ready Tasks mit gleicher priorität aufgeteilt(steht irgendwas 
+						mit time of the tick interrupt, versteh isch nisch oida).Falls configUSE\_TIME\_SLICING 0 sein sollte, dann wird RTOS beim auftreten des TickInterrupts nicht zu einem anderen ready task mit der 
+						selben Priorität wechseln.
+					\item[$\bullet$ IDLE Task]
+						\begin{itemize}
+							\item IDLE Task wird von vTaskStartScheduler() erstellt.
+							\item Wird mit Hilfe von tskIDLE\_PRIORITY und configMINIMAL\_STACK\_SIZE erstellt.
+							\item Läuft immer wenn kein anderer Task Läuft.
+							\item Falls in einer Anwendung vTaskDelete() verwendet wurde, räumt IDLE Task den Speicher auf.
+								Daher sollte man schauen dass der IDLE Task immer Rechenzeit erhält (nicht ausgehungert wird).
+							\item Ruft IDLE Hook auf.
+						\end{itemize}
+						\begin{lstlisting}
+static void prvIdleTask ( void * pvParameters ) {
+	for (;;) {
+		RemoveDeletedTasksFromList () ;
+		if (! configUSE_PREEMPTION ) {
+			taskYIELD () ;
+		} else if ( configIDLE_SHOULD_YIELD ) {
+			if ( NofReadyTasks ( tskIDLE_PRIORITY ) >1) {
+				taskYIELD () ;
+			}
+		}
+		IdleHook () ;
+	} /* for */
+}
+						\end{lstlisting} 
+						configIDLE\_SHOULD\_YIELD bestimmt beim einem preemtiven Scheduler ob
+						der IDLE Task gleich die Kontrolle an einen Task im Ready Zustand abgeben
+						soll, oder ob er auf die n"achste Unterbrechung (Preemption) warten soll. Hierzu
+						wird ein taskYIELD() verwendet, welches einen Kontextswitch veranlasst.
+					\item[$\bullet$ Blinky Task]
+					Beispiel BLinkyTask erstellen. Wird entweder im main() oder innerhalb eines anderen Tasks erstellt.
+						\begin{lstlisting}
+BaseType_t res ;
+TaskHandle_t taskHndl ;
+res = xTaskCreate ( BlinkyTask , /* function */
+	" Blinky ", /* Kernel awareness name */
+	500/ sizeof ( StackType_t ) , /* stack */
+	( void *) NULL , /* task parameter */
+	tskIDLE_PRIORITY +1 , /* priority */
+	& taskHndl /* handle */
+	);
+if ( res != pdPASS ) { /* error handling here */ }
+						\end{lstlisting}  
+							\begin{itemize}
+								\item xTaskCreate() wird der Task erstellt
+								\item Als erstes Argument wird der Name (oder besser: Funktionszeiger) (BlinkyTask) der Task Funktion ubergeben.								
+								\item Danach werden ein String mit dem Namen (Blinky) f"ur den Debugger und der Task Awareness.							
+								\item 500/sizeof(StackType\_t) gibt Anzahl Bytes auf Stack. Als alternative könnte man auch configMINIMAL\_STACK\_SIZE verwenden,
+								\item $( void *) NULL$ ist ein optionaler Input Parameter. dieser Zeiger wird dem Task als Argument
+								 "ubergeben, kann aber auch mit NULL gesetzt werden.Es ist zu beachten, dass das Objekt auf das der Zeiger zeigt zur Taskausfuhrungszeit auch ¨
+								 noch existiert, das heisst z.B. auf eine globale Variable zeigt.
+								\item tskIDLE PRIORITY gibt üblicherweise die Priorität des Tasks an, hier also 0.  Optional kann auch ein Task Handle
+								angegeben werden (call-by-reference), d.h. wo der Handle gespeichert werden
+								soll.
+								\item xTaskCreate() gibt einen Fehler Code vom Typ BaseType\_t zrur"uck. Falls xTaskCreate() ein pdPASS zur"uckgibt hat es funktioniert, ansonsten ist ein 
+								Fehler aufgetreten, z.B. war nicht gen"ugend Speicher vorhanden.
+							\end{itemize}
+							Der Task selber Sieht wie eine normale Funktion aus:
+						\begin{lstlisting}
+static void BlinkyTask ( void * pvParameters ) {
+	( void ) pvParameters ; /* not used */
+	for (;;) {
+		LED_Neg () ;
+	}
+}
+						\end{lstlisting}  
+						Der Task l"auft normalerweise in einer Endlosschleife (ausser er l"oscht sich selbst). Der Task hat kein Return da er nirgends zurückkehren kann.
+						Man sieht auch den Task Parameter (void Zeiger) welcher beim einstellen angegben wurde. Bei nicht-nutzung kann der Parameter auch auf coid gecastet werden, 
+						damit der Compiler keine Warnung ausgibt.
+						Im oben Dargestellten Code wird die LED so schnell wie m"oglich negiert. Der Task verwenet die ganze Rechenzeit. Dies ist unbefriedigend, man sollt dem
+						Scheduler Rechenzeit zur"uck geben.
+						\begin{lstlisting}
+static void BlinkyTask ( void * pvParameters ) {
+	for (;;) {
+		LED_Neg () ;
+		vTaskDelay ( pdMS_TO_TICKS (50) ) ;
+	}
+}
+						\end{lstlisting}  
+						\begin{itemize}
+							\item vTaskDelay() gibt Rechenzeit zurück, da ja sonst die armen Tasks mit niedriger Prio hungern müssen.
+							\item pdMS\_TO\_TICKS berechnet ben"otigte Ticks.
+						\end{itemize}
+						\begin{lstlisting}
+/* Converts a time in milliseconds to a time in ticks . This macro
+can be overridden by a macro of the same name defined in
+FreeRTOSConfig .h in case the definition here is not suitable for
+your application . */
+#ifndef pdMS_TO_TICKS
+	#define pdMS_TO_TICKS ( xTimeInMs ) \
+		(( TickType_t ) ((( TickType_t ) ( xTimeInMs ) * ( TickType_t )
+			configTICK_RATE_HZ ) / ( TickType_t ) 1000) )
+#endif
+						\end{lstlisting}  
+						\begin{itemize}
+							\item configTICK\_RATE\_HZ ist 1000 (1 ms), dann ergibt pdMS\_TO\_TICKS(50) die
+							Anzahl von 50 Ticks.						
+							\item configTICK\_RATE\_HZ ist 100 (10 ms), dann ergibt pdMS\_TO\_TICKS(50) die
+							Anzahl von 5 Ticks.
+							\item configTICK\_RATE\_HZ ist 100 (10 ms), dann ergibt pdMS\_TO\_TICKS(15) die
+							Anzahl von 1 Tick. Beachte dass die Division ganzzahlig ist.
+						\end{itemize}
+						Das Macro pdMS TO TICKS kann auch anwendungsspezifisch "uberschrieben werden
+						Dies ist z.B. n"otig, falls man eine Tick Frequenz h"oher als 1 ms verwenden
+						m"ochte.Das vTaskDelay() wartet die angegebene Anzahl Ticks vom Zeitpunkt des
+						Aufrufs. F"ur das folgende Beispiel bedeutet dies, dass der Task nicht mit 
+						einer fixen Frequenz l"auft, sondern je nachdem wie viel Zeit im ’do something’
+						verbraucht wird:
+						\begin{lstlisting}
+static void MyTask ( void * pvParameters ) {
+	for (;;) {
+		/* do something here */
+	vTaskDelay ( pdMS_TO_TICKS (50) );
+	}
+}
+						\end{lstlisting}  
+						M"ochte man eine fixe Frequenz erreichen, muss man vTaskDelayUntil()
+						verwenden:
+						\begin{lstlisting}
+void vTaskDelayUntil ( TickType_t * pxPreviousWakeTime , const
+	TickType_t xTimeIncrement );
+						\end{lstlisting}  
+						Hierbei ubergibt man als ersten by-reference Parameter einen Zeiger auf die ¨
+						Zeit (Tick Count), bei der man zuletzt am Laufen war:
+						\begin{lstlisting}
+static void BlinkyTask ( void * pvParameters ) {
+	TickType_t xLastWakeTime = xTaskGetTickCount () ;
+	for (;;) {
+		LED_Neg () ;
+		vTaskDelayUntil (& xLastWakeTime , pdMS_TO_TICKS (50) ) ;
+	}
+}
+						\end{lstlisting} 
+						Den aktuellen Tick Z"ahler bekommt man mit xTaskGetTickCount(). Den
+						Wert "ubergibt man dann als Zeiger. Damit weiss das Betriebssystem, wie lange
+						vTaskDelayUntil() effektiv warten soll. Der Wert des Z"ahlers ist dann bei der
+						R"uckkehr von vTaskDelayUntil() auf den neuen Wert angepasst, muss ihn also
+						nicht nochmals setzen. Damit wird eine konstannte Frequenz des Tasks erreicht,
+						unabh"angig der Ausfuhrungszeit des Tasks.
+					\item[$\bullet$ Task Control Ubersicht]
+						Mit dem FreeRTOS Task Control API wird die Ausf"uhrung der Tasks beeinflusst:
+					\begin{itemize}
+						\item Task verz"ogern: vTaskDelay(), vTaskDelayUntil()
+						\item Prio zur Laufzeit "andern: uxTaskPriorityGet(), vTaskPrioritySet()
+						\item Task anhalten und weiterfahren lassen: vTaskSuspend(),
+						vTaskResume(), vTaskResumeFromISR()	
+						\item vTaskPrioritySet: Beim Erstellen eines Tasks wird schon eine Priorit"at zugewiesen. Man kann zur
+						Laufzeit die Priorit"at von Tasks "andern, um zum Beispiel auf eine ge"anderte
+						Auslastung zu reagieren. Generell sollte man dies aber sehr sorgf"altig planen,
+						da eine dynamische Anderung des Systems die Komplexit"at erh"oht und zu unerwunschten Nebeneffekten f"uhren kann. Um die Priorit"at eines Tasks zu "andern
+						braucht man den Task Handle oder NULL fur den aufrufenden Task. Auch sollte ¨
+						die Funktion nur von einem Task Kontext benutzt werden
+						\begin{lstlisting}
+void vTaskPrioritySet ( TaskHandle_t pxTask , unsigned portBASE_TYPE
+	uxNewPriority );
+						\end{lstlisting}
+						Nachfolgend ein Beispiel, bei dem die Priorit¨at eines Tasks um 1 erh¨oht wird.	
+						\begin{lstlisting}
+xTaskCreate ( vTaskCode , " MyTask ", configMINIMAL_STACK_SIZE , NULL ,
+	tskIDLE_PRIORITY , & xHandle );
+...
+vTaskPrioritySet ( xHandle , tskIDLE_PRIORITY +1) ;
+						\end{lstlisting}			
+					\end{itemize} 
+				\end{description}
+			\subsection{Kernel Control}
+				Die Kernel Control API ermöglicht es einem den Kernel zu Kontrollieren.
+				\begin{itemize}
+					\item Starten und Beenden des Kernels: vTaskStartScheduler(), vTaskEndScheduler() 						
+					\item Kernel Task Switching und anhalten und wieder einschalten: vTaskSuspendAll(), vTaskResumeAll()
+					\item Kontrolle an ready Task abgeben: taskYIELD()
+				\end{itemize}
+				\begin{description}
+					\item[$\bullet$ vTaskStartScheduler]
+						Startet den Scheduler: 
+						\begin{lstlisting}
+void vTaskStartScheduler ( void );
+						\end{lstlisting}  
+						\begin{itemize}
+							\item Bewirkt Wechsel vom Init zum Running state.						
+							\item Erstellt den IDLE task mit config\_MINIMAL\_STACK\_SIZE und tskIDLE\_PRIORITY.
+							      Falls SoftwareTimer aktiviert sind wird auch ein daemon timer aktiviert (was au immer das si sött...)
+							\item Der ready task mit der höchsten Priorität wird gestartet ( bin mit nicht sicher ob das jetzt von den Softw timern abhängt, aber denke nicht)
+							\item Kehrt nicht zur"uck bis vTaskEndScheduler()  aufgerufen wird.
+							\item Meistens werden zuerst alle Tasks erstellt und dann wird vTaskStartScheduler() aufgerufen. 
+						\end{itemize}
+					\item[$\bullet$ vTaskEndtScheduler]
+						\begin{lstlisting}
+void vTaskEndScheduler ( void );
+						\end{lstlisting} 
+						\begin{itemize}
+							\item Beendet den Kernel						
+							\item Springt dort zur"uck wo vTaskStartScheduler() aufgerufen wurde.
+							\item Ben"otigt setjmp(), lingjmp() welche nicht f"ur jeden FreeRTOS port implementiert sind.
+								  Der MCUOnEclipse FreeRTOS port hat dies f"ur alle architekturen implementiert.
+						\end{itemize} 	
+					\item[$\bullet$ vTaskSuspendAll]
+						\begin{lstlisting}
+							void vTaskSuspendAll ( void );
+						\end{lstlisting}  
+						\begin{itemize}
+							\item Erzwingt den Wechsel vom aktiven in den suspended Zustand
+							\item Nach dem Aufruf dieser Funktion wird kein Kontext switch vorkommen bis xTaskResumeAll() aufgerufen wurde.					
+						\end{itemize} 
+						\item[$\bullet$ xTaskResumeAll]
+						\begin{itemize}
+							\item Ist das Gegenteil von SuspendAll-Y bringt den Kernel zurück in den Aktiven Zustand.
+							\item Der R"uckgabewert der Funktino ist pdFALSE falls kein bzw pdTRUE falls ein kontext switch mit dem API aufruf stattgefunden hat.
+							\item Ist pdFalse falls kernel noch im suspended state ist.					
+						\end{itemize} 
+				\end{description}
 % ...stuff goes here....
 
 \end{multicols*}
