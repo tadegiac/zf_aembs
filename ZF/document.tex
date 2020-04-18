@@ -710,12 +710,58 @@ void vTaskEndScheduler ( void );
 							\item Erzwingt den Wechsel vom aktiven in den suspended Zustand
 							\item Nach dem Aufruf dieser Funktion wird kein Kontext switch vorkommen bis xTaskResumeAll() aufgerufen wurde.					
 						\end{itemize} 
-						\item[$\bullet$ xTaskResumeAll]
+					\item[$\bullet$ xTaskResumeAll]
 						\begin{itemize}
 							\item Ist das Gegenteil von SuspendAll-Y bringt den Kernel zurück in den Aktiven Zustand.
 							\item Der R"uckgabewert der Funktino ist pdFALSE falls kein bzw pdTRUE falls ein kontext switch mit dem API aufruf stattgefunden hat.
 							\item Ist pdFalse falls kernel noch im suspended state ist.					
 						\end{itemize} 
+					\item[$\bullet$ taskDISABLE\_INTERRUPTS taskENABLE\_INTERRUPTS]
+					Codebeispiel:
+						\begin{lstlisting}
+void taskENTER_CRITICAL ( void ) ;
+void taskEXIT_CRITICAL ( void );
+void vPortEnterCritical ( void ) {
+	portDISABLE_INTERRUPTS () ;
+	uxCriticalNesting ++;
+}
+void vPortExitCritical ( void ) {
+	uxCriticalNesting - -;
+	if ( uxCriticalNesting == 0) {
+		portENABLE_INTERRUPTS () ;
+}
+}
+						\end{lstlisting} 						
+						\begin{itemize}
+							\item taskENTER CRITCAL() und taskEXIT CRITCAL() werden um im Kernel die task Critical section zu machen. 
+							\item Critical Section deaktiviert die Interrupts aber nur auf Kernel level.
+							\item Die Implementation verwendet einen counter welcher das nesting kritischer makros erlaubt.
+							\item Es gibt Ports die Interrupts immer Erlauben wenn der Counter null erreicht. Auch wenn 
+								  taskENTER CRITCAL() verwendet wurde (alte was)
+							\item Keine anderen FreeRTOS API Funktionen innerhalb eines kritischen bereichs eines Tasks aufrufen (hä).
+						\end{itemize}
+					\item[$\bullet$ taskYELD]
+					Codebeispiel: 
+						\begin{lstlisting}
+#define taskYIELD () portYIELD ()
+#define portYIELD () vPortYieldFromISR ()
+void vPortYieldFromISR ( void ) {
+	/* Set a PendSV to request a context switch . */
+	*( portNVIC_INT_CTRL ) = portNVIC_PENDSVSET_BIT ;
+	/* Barriers are normally not required but do ensure the code is
+		completely within the specified behavior for the architecture
+		. */
+	__asm volatile (" dsb ");
+	__asm volatile (" isb ");
+}
+						\end{lstlisting}
+						\begin{itemize}
+							\item task YIELD() ist typischerweise als makro implementiert. 
+							\item damit kann ein task einen Kontext switch verlangen.
+							\item im kooperativen RTOSmodus kann so ein task kontrolle zurück an den kernel geben, der scheduler wird dann
+								  den nächst höher priorisierten Task (h"a)
+						\end{itemize}
+
 				\end{description}
 % ...stuff goes here....
 
