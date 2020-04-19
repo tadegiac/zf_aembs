@@ -716,7 +716,7 @@ void vTaskEndScheduler ( void );
 							\item Der R"uckgabewert der Funktino ist pdFALSE falls kein bzw pdTRUE falls ein kontext switch mit dem API aufruf stattgefunden hat.
 							\item Ist pdFalse falls kernel noch im suspended state ist.					
 						\end{itemize} 
-					\item[$\bullet$ taskDISABLE\_INTERRUPTS taskENABLE\_INTERRUPTS]
+					\item[$\bullet$ taskDISABLE ENABLE\_Interrupts]
 					Codebeispiel:
 						\begin{lstlisting}
 void taskENTER_CRITICAL ( void ) ;
@@ -761,8 +761,277 @@ void vPortYieldFromISR ( void ) {
 							\item im kooperativen RTOSmodus kann so ein task kontrolle zurück an den kernel geben, der scheduler wird dann
 								  den nächst höher priorisierten Task (h"a)
 						\end{itemize}
+					\end{description}
+			\subsection{RTOS Visualisierungen}
+				Hilfsmittel zur Überwachung des Systemzustandes.
+					\begin{description}				
+						\item[$\bullet$ Eclipse Plugins]
+							Viele Eclipse IDE Distributionen wie etwa MCUXpresse haben spezielle Plugins und Views. Gewisse Erweiterungen erlauben
+							sogar ein Debugging auf Taskebene. Die Meisten Views sind Stop Mode views. 
+						\item[$\bullet$ Task List View]
+							 Das Bild zeigt die Liste mit den Tasks. Damit diese Informationen verfügbar sind, muss ein \#define im FreeRTOSConfig.h 
+							 eingeschaltet werden.
+							 \includegraphics[width=0.6\linewidth,left]{img/Queue_List_view.PNG}
+							 \begin{itemize}
+								 \item Einschalten mit configUSE\_TRACE\_FACILITY
+								 \item Informationen "uber Tasks: TCB (Task Control Block), Namen, Handle
+								 \item Task Zustand, Basis Priorit"at und aktuelle Priorit"at
+								 \item Stack Benutzung
+								 \item Event Objekte: worauf der Task wartet/blockiert ist
+								 \item Runtime: Wieviel Prozent der Rechenzeit benutzt
+							 \end{itemize}
+						\item[$\bullet$ Queue List View]	
+							Mit dieser Ansicht k"onnen die aktuellen Queues im System angezeigt werden
+							. Da in FreeRTOS sowohl Semaphore und Mutex mit Queues
+							realisiert sind, dient diese Anzeige auch daf"ur. Da die Queues in FreeRTOS 
+							ohne Namen erstellt werden, sollten diese zur Laufzeit mit einem Namen in der
+							Registry versehen werden
+							\begin{itemize}
+								\item Anzeigen der Queues, inklusive Semaphore und Mutex
+								\item Queue Name muss mit vQueueAddToRegistry() registriert werden
+								\item configQUEUE REGISTRY SIZE in FreeRTOSConfig.h
+							\end{itemize}
+							\includegraphics[width=0.6\linewidth,left]{img/Queue_List_view.PNG}
+							Nachfolgend ein Beispiel, wie man die Registry auf 10 Eintr¨age einstellt:
+							\begin{lstlisting}
+#define configQUEUE_REGISTRY_SIZE 10
+							\end{lstlisting}
+							Untenstehendes Beispiel zeigt, wie man nach dem Erstellen einer Queue ihr
+							einen Namen gibt, damit man diese im Debugger ansehen kann:
+							\begin{lstlisting}
+static xQueueHandle SQUEUE_Queue ;
+Queue = xQueueCreate ( SQUEUE_LENGTH , SQUEUE_ITEM_SIZE );
+if ( Queue == NULL ) {
+	for (;;) {} /* out of memory ? */
+}
+vQueueAddToRegistry ( Queue , " ShellQueue ");
+							\end{lstlisting}
+							Sollten die Pl"atze nicht ausreichen, kann man jederzeit einen Namen mit
+							vQueueUnregisterQueue() wieder austragen. Dies geschieht auch wenn man
+							die Queue l"oscht.
+						\item[$\bullet$ Segger Real Time Transfer] 
+						Die bisherigen Möglichkeit verwenden den Debugger, um Daten über das Betriebssystem anzuzeigen. 
+						Eine andere M"oglichkeit ist es w"ahrend dem Laufen der Anwendung die Daten 2uber einen Kommunikatinoskanal zu "ubertragen.
+						Ein Weg dazu ist die Verwendung von SEGGER RTT:
+						\begin{itemize}
+							\item Bidirektionale Kommunikation "uber Debug Schnittstelle
+							\item Ben"otigt SEGGER J-Link Hardware oder Debug Schnittstelle (z.B OpenSDA)
+							\item Kleiner Speicherbedarf: 500 Bytes Flash, 50 RAM pro Kanal
+							\item Spezielle Viewer oder Telnet (Port 19021) (McuOnEclipse nachlesen)
+						\end{itemize}
+						Mittels dem RTT Protokoll k"onnen nun Daten w"ahrend dem Betrieb gesendet werden und z.B vom SystemViewern dargestellt werden 
+						\item[$\bullet$ FreeRTOS Trace Hooks]
+						Damit RTOS Daten senden Kann, muss es zuerst instrumentiert werden. Dies geschieht durch Hooks, wie im folgenden Bsp:
+						\includegraphics[width=0.6\linewidth,left]{img/Segger_RTT_Client.PNG}	 
+						\begin{lstlisting}
+#ifndef traceTASK_SWITCHED_OUT
+	/* Called before a task has been selected to run . pxCurrentTCB
+		holds a pointer
+	to the task control block of the task being switched out . */
+	#define traceTASK_SWITCHED_OUT ()
+#endif
+						\end{lstlisting}
+						Diese Hooks werden dann verwendet, um Daten zu senden und aufzuzeichnen
+						\begin{itemize}
+							\item Trace Hooks im Kernel (Instrumentierung): Task erstellen, Kontext switch, 
+							\item Kernel meldet an strategischen Stellen Aktivität
+							\item Einschalten mit configUSE\_TRACE\_HOOKS
+								  \begin{itemize}
+									\item Eigenes Aufzeichnen und Tracing
+									\item Percepio FreeRTOS + Trace
+									\item Segger System Viewer
+								  \end{itemize}	
+						\end{itemize}
+						\item[$\bullet$ Segger System Viewer]
+							Mit so einem Viewer kann der momentane Zustand des Systems und auch der Ablauf "uber die Zeit betrachtet werden.
+						\item[$\bullet$ Percepio Tracealizer]
+		 
+					\end{description}
+				\subsection{Reentrancy}
+					\begin{description}
+						\item[$\bullet$ Gemeinsamer Code:]
+							Im Softwareengeneering wird der Code oftmals einem Refactoring unterzogen. Ein Teil dieses Refactoring ist es 
+							teile des Codes in gemeinsame Subroutinen zusammenzufassen. Jetzt kann es vorkommen dass genaud dieser Code vorkommen
+							Hauptprogramm und von der ISR genutzt wird.
+							\includegraphics[width=0.6\linewidth,left]{img/Common_Subroutines.PNG}
+							\item[$\bullet$ Gemeinsame Daten]
+							\item[$\bullet$ Reentrancy] 
+								Mit reentrancy bezeichnet man das Wiedereintreten in eine Subroutine. Das Problem dabei ist, dass unter Umständen
+								Zwei Programme auf die Gleiche Variable zugreiffen und diese dann verändern. Das würde zu falschen Resultaten führen.
+								\includegraphics[width=0.6\linewidth,left]{img/Common_Data.PNG}
+								\includegraphics[width=0.6\linewidth,left]{img/Wieder_eintreten_gemeinsame_Subroutine.PNG}  
+								Da jeder Zeit ein Interrupt auftreten kann,  muss jede Soubroutine reentrant sein (was heisst das? Wieso).
+								Im Unten dargestellten Beispiel wird eine Variable hochgezählt, immer wenn einer Von zwei Tastern gedrückt wird.
+								\begin{lstlisting}
+int cntr = 0;
 
-				\end{description}
+void BtnA ( void ) {
+	cntr ++;
+	printf ("a: %d\r\n", cntr );
+}
+
+void BtnB ( void ) {
+	cntr ++;
+	printf ("b: %d\r\n", cntr );
+}
+								\end{lstlisting}
+								Man erwartet jetzt eigentlich, das der Variablen wert immer um eins erhöht wird. Dies ist aber nicht der Fall.
+								\begin{lstlisting}
+	a: 1
+	b: 2
+	a: 3
+	b: 4
+	a: 4
+								\end{lstlisting}
+								Der Grund dafür ist, dass das Erhöhen des Z"ahlers mit einer Load-Increment-Store Sequenz gemacht wird. Hierbei kann 
+								es passieren, dass ein Interrupt die Sequenz unterbricht und zu einem Falschen Resultat führt.
+								\begin{lstlisting}
+ld cntr , R0 (3)
+inc R0 (4)
+			ld cntr , R0 (3)
+			inc R0 (4)
+			st R0 , cntr (4)
+			print cntr (4)
+st R0 , cntr (4)
+prinf cntr (4)
+								\end{lstlisting}
+								Einfach gesagt; Die Taste wird gedrückt, es soll eine 4 gespeichert werden. Es werden 4 Assembly Schritte dafür benötigt.
+								Ein Interrupt unterbricht aber beim zweiten Schritt, da die Taste ein Zweites Mal gedrückt wurde. Jetzt wird 3 um eins erhöht und 4 wird abgespeichert.
+								Dann geht der Code zur"uck und speichert nochmals die 4 die vor dem unterbruch erzeugt wurde. 
+							\item[$\bullet$ Disable and Enable Interrupts] 	
+								Diese Problem wird durch das Unterbrechen von Interrupts generiert. Man kann dieses Problem also umgehen, indem man
+								das Unterbrechen von Interrupts verhindert. Die Sprache C hat keine Interrupt Unterst"utzung, man muss dies daher mit
+								Makros umsetzen. Bsp f"ur Cortex.
+								\begin{lstlisting}
+#define DISABLE_INTERRUPTS { __asm volatile (" cpsid i") ;}
+#define ENABLE_INTERRUPTS { __asm volatile (" cpsie i") ;}
+								\end{lstlisting}
+								Damit kann man folgende Subroutinen reentrant machen.
+								\begin{lstlisting}
+#define DISABLE_INTERRUPTS { __asm volatile (" cpsid i") ;}
+#define ENABLE_INTERRUPTS { __asm volatile (" cpsie i") ;}
+int cntr = 0; /* number of people in the room */
+
+void Inc ( void ) {
+	DISABLE_INTERRUPTS ;
+	cntr ++;
+	ENABLE_INTERRUPTS ;
+}
+
+void Dec ( void ) {
+	DISABLE_INTERRUPTS ;
+	cntr - -;
+	ENABLE_INTERRUPTS ;
+}
+								\end{lstlisting}
+								Dies f"uhrt zu folgender verbesserter Version
+								\begin{lstlisting}
+void Inc ( void ) {
+	DISABLE_INTERRUPTS ;
+	cntr ++;
+	ENABLE_INTERRUPTS ;
+}
+								\end{lstlisting}
+								\begin{lstlisting}
+void doCounting ( void ) {
+	DISABLE_INTERRUPTS ;
+	if ( cntr <100) {
+	Inc () ;
+	}
+	print ( cntr );
+	ENABLE_INTERRUPTS ;
+}
+								\end{lstlisting}
+								Problem hierbei ist, dass alle Interrupts eher lange ausgeschaltet sind. Dies f"uhrt zu einer grossen Interrupt Latenz.
+								Zudem werden in der Funktion Inc() die Interrupts wieder eingeschaltet.
+								Eine weiter Optimierung könnte so Aussehen.
+								\begin{lstlisting}
+void Inc ( void ) {
+	DISABLE_INTERRUPTS ;
+	cntr ++;
+	ENABLE_INTERRUPTS ;
+}
+								\end{lstlisting}
+								Die Variable cntr w"urde wie folgt benutzt:
+								\begin{lstlisting}
+void doCounting ( void ) {
+	DISABLE_INTERRUPTS ;
+	bool isLess = cntr <100;
+	ENABLE_INTERRUPTS ;
+	if ( isLess ) {
+		Inc () ;
+	}
+	DISABLE_INTERRUPTS ;
+	print ( cntr );
+	ENABLE_INTERRUPTS ;
+}
+								\end{lstlisting}
+								Diese Variante verschlimmert alles. Die Variable ist zwar geschützt, aber falls die Ausgabe des Z"ahlers zusammenh"angen soll, wird dies nicht erreicht.
+								Das Heisst wir m"ussen uns etwas anderes "uberlegen.
+							\item[$\bullet$ Disable and Enable Interrupts]
+					Problem beim ein und ausschalten von interrupts $\rightarrow$ es können unbeabsichtigt interrupts wider eingeschaltet werden.
+								\begin{lstlisting}
+void Inc ( void ) {
+	DISABLE_INTERRUPTS ;
+	cntr ++;
+	ENABLE_INTERRUPTS ;
+}
+
+void main ( void ) {
+	/* interrupts are disabled , we will enable them later */
+	Inc () ;
+	/* Upps ! interrupts are suddenly enabled ! */
+}
+								\end{lstlisting}
+								Es scheint also irgendwie noch sinnvol ztu sein zu Wissen ob beim verlassen der Critical Section(Wasch di critical section?)
+								die Interrupts schon ausgeschaltet waren oder nicht. Dazu kann man ja den Zustand in einer lokalen Variable speichern.
+								\begin{lstlisting}
+#define CriticalVariable () \
+	uint8_t cpuSR /* variable to store current status */
+								\end{lstlisting}
+								Hiermit kann man nun per Inline Assembler den Zustand in dieser Variable speichern.
+								\begin{lstlisting}
+#define EnterCritical () \
+	do { \
+		__asm ( \
+			" mrs r0 , PRIMASK \n"\
+			" cpsid i \n"\
+			" strb r0 , cpuSR \n"\
+	); \
+} while (0)
+								\end{lstlisting}
+								Beim Verlassen der Critical Section wird dann der vorherige Zustand hergestellt:
+								\begin{lstlisting}
+#define ExitCritical () \
+	do { \
+		__asm ( \
+		" ldrb r0 , cpuSR \n"\
+		" msr PRIMASK ,r0 \n"\
+	); \
+} while (0)
+								\end{lstlisting}
+								Hiermit kann man eine Critical Sectino nun auch veschachtelt realisieren:
+								\begin{lstlisting}
+void Inc ( void ) {
+	McuCriticalSection_CriticalVariable () ;
+
+	McuCriticalSection_EnterCritical () ;
+	cntr ++;
+	McuCriticalSection_ExitCritical () ;
+}
+void doCounting ( void ) {
+	McuCriticalSection_CriticalVariable () ;
+	
+	McuCriticalSection_EnterCritical ;
+	Inc () ;
+	McuCriticalSection_ExitCritical ;
+}
+
+								\end{lstlisting}
+					\end{description}
+
+				\subsection{Heap Memory}
+				\subsection{Hooks}
 % ...stuff goes here....
 
 \end{multicols*}
