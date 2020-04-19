@@ -1095,6 +1095,151 @@ void foo ( void ) {
 				\end{description}
 
 				\subsection{Hooks}
+				Ermöglichen "uber Ereignisse (Hooks) informiert zu werden. (gleubs)
+				\begin{description}
+					\item[$\bullet$ "Ubersicht]
+						Hooks sind in FreeRTOS synchrone Callbacks. Das System ruft "uber vordefinierte Namen Funktionen in der Anwendung auf.
+						Diese Hooks sind optional, d.h. diese k"onnen, m"ussen aber nicht verwendet werden. Wenn man die 
+						Hooks nicht ben"otigt, dann sollte man auf diese aus Performance-Gr"unden verzichten. Das Ein-und Ausschalten erfolgt "uber
+						Makros im FreeRTOSConfig.h, wobei 0 den Hook ausschaltet. Es gibt folgende Hooks: 
+						\begin{itemize}
+							\item idle Hook
+								Wird Aufgerufen, wenn das RTOS nichts zu tun hat. Dieser Hook wird of F"ur lowpoer Anwendungen ben"otigt.
+							\item Tick Hook
+								Wird aufgerufen f"ur jeden System Zeit Tick. Dieser kann als Timer Ersatz dienen.
+							\item Malloc Failed Hook
+								Wird aufgerufen wenn Speicherallozierung fehlschl"agt. Dieser Hook wird im Fehlerfall aufgerufen.
+							\item Stack Overflow Hook
+								Dieser Hook wird aufgerufen, wenn ein Stack"uberlauf festegestellt wird.
+								Dieser Hook dient auch em Fehlerfall
+						\end{itemize}
+					\item[$\bullet$ Idle Hook]
+						Folgendes Makro in FreeRTOSConfig.h kontrolliert den Idle Hook:
+						\begin{lstlisting}
+#define configUSE_IDLE_HOOK 1 /* 1: use Idle hook ; 0: no Idle
+	hook */
+#define configUSE_IDLE_HOOK_NAME vApplicationIdleHook
+						\end{lstlisting}
+							Mit dem ersten makro kann man den Hook ein oder ausschalten.Das zweite Makro definiert den namen der Funktion, welche aufgerufen wird.
+							Der Idle Hook wird vom Idle Task bei jedem Schleifendurchlauf aufgerufen.
+							Da der Idle Task nicht wirklich wartet, sondern dauernd die Schleife ausf"uhrt, kann es sein dass der Hook mehrfach und dauernd aufgerufen wird.
+							Eine "ubliche Implementation ist es im Hook in den Low Power Modus zu gehen, bis ein interrupt den modus verl"asst:
+						\begin{lstlisting}
+void vApplicationIdleHook ( void ) {
+	/* Called whenever the RTOS is idle ( from the IDLE task ) */
+	CPU_EnterLowPowerMode () ; /* wait for interrupt */
+	/* here an interrupt woke us up */
+}
+						\end{lstlisting}
+						Beim ARM Cortex-M kann man die WFI ( Wait For Interrupt) Instruktion verwenden: 
+						diese schaltet das Clcoking der CPU aus, es werden keine Instruktionen ausgef"uhrt und der Prozessor ist somit schon
+						in einem einfachen Stromsparmodus.
+
+						\begin{lstlisting}
+void vApplicationIdleHook ( void ) {
+	__asm volatile (" dsb ");
+	__asm volatile (" wfi ");
+	__asm volatile (" isb ");
+}
+						\end{lstlisting}
+						Die Instruktion dsb (data Synchronisation Barrier) und isb ( Instructin Sychronisation Barrier) werden zur Sicherheit
+						mit angegeben. 
+						Eine m"ogliche Erweiterung ist das Schalten eines Pins oder einer LED:
+						\begin{lstlisting}
+void vApplicationIdleHook ( void ) {
+	Pin_Toggle () ;
+	__asm volatile (" dsb ");
+	__asm volatile (" wfi ");
+	__asm volatile (" isb ");
+}
+						\end{lstlisting}	
+						Damit kann man extern anzeigen, wann man in den Low-Power Modus geht:
+						wenn der Pin sich "andert, geht die Anwendung in den Low-Power Modus. Zu beachten ist,
+						dass z.B. ein Tick Interrupt den Wait Modus unterbricht, und dass 
+						der Scheduler m"oglicherweise einen anderen Task an die Reihe nimmt. 
+						Somit funktioniert ein naiver Ansatz mit LED an -WFI-LEDaus hier nicht. (?)					
+					\item[$\bullet$ Tick Hook]
+					\item[Immer wenn der TickInterrupt passiert, dann wird auch dieser Hook aufgerufen. 
+					Der Tick Hook wird auch mit makros im FreeRTOSConfig.h konfiguriert:] 
+						\begin{lstlisting}
+#define configUSE_TICK_HOOK 1 /* 1: use Tick hook ; 0: no Tick
+	hook */
+#define configUSE_TICK_HOOK_NAME vApplicationTickHook
+						\end{lstlisting}
+						Damit hat man einen einfachen Timer mit der Frequenz des RTOS Tick Interrupts zur Verf"ugung.
+						\begin{lstlisting}
+void vApplicationTickHook ( void ) {
+	/* Called for every tick interrupt */
+	PIN_Toggle () ; /* debug tick interrupt */
+}
+						\end{lstlisting} 
+						Da der Hook im Interrupt Kontext l"auft, gilt auch hier: kurz und schnell halten, nicht blockieren. Falls man RTOS Funktionen
+						benutzt, darf man auch nur diejenigen mit FROMISR() am Anfang verwenden.
+					\item[$\bullet$ Malloc Failed Hook]
+						Dieser Hook wird aufgerufen, falls im FreeRTOS Heap kein Speicher mehr zur Vef"ugung steht. Das RTOS braucht Speicher f"urdealle seine
+						dynamischen Strukturen, wie Listen von Tasks oder den Stack f"ur die Tasks. Folgende Makros strategischen im FreeRTOSConfig.h zur
+						Verf"ugung:
+						\begin{lstlisting}
+#define configUSE_MALLOC_FAILED_HOOK 1 /* 1: use MallocFailed
+	hook ; 0: no MallocFailed hook */
+#define configUSE_MALLOC_FAILED_HOOK_NAME
+	McuRTOS_vApplicationMallocFailedHook
+						\end{lstlisting}
+						Dies bedeutet, dass man immernoch die R"uckgabewerte "uberpr"ufen sollte, da der Hook ja ausgeschaltet werden kann. Typioscherweise
+						kann man nicht viel machen, wenn man keinen Speicher mehr hat. eine standard Implementation des Hooks schaltet die Interrupts aus und stoppt 
+						mit dem Debugger:
+						\begin{lstlisting}
+void vApplicationMallocFailedHook ( void ) {
+	/* Called if a call to pvPortMalloc () fails because there is
+		insufficient free memory available in the FreeRTOS heap .
+		pvPortMalloc () is called internally by FreeRTOS API functions
+		that create tasks , queues , software timers , and semaphores .
+		The size of the FreeRTOS heap is set by the
+		configTOTAL_HEAP_SIZE configuration constant in
+		FreeRTOSConfig .h. */
+	taskDISABLE_INTERRUPTS () ;
+	__asm volatile (" bkpt #0") ;
+	for (;;) {} /* stop for debugging */
+}
+						\end{lstlisting} 
+						Falls man keinen Speicher mehr aht, k"onnte es daran liegen, dass der heap nicht gross genug gew"ahlt wurde, zu viel Speicher alloziert
+						wird oder dass Speicher nicht freigegeben wird.
+					\item[$\bullet$ Stack Overflow Hook]
+						Der Stack Overflow Hook wird aufgerufen, wenn das RTOS einen Task Stack Overflow entdeckt. Folgende Einstellungen sind im 
+						FreeRTOSConfig.h verf"ugbar:
+						\begin{lstlisting}
+#define configCHECK_FOR_STACK_OVERFLOW 1 /* 0 is disabling
+	stack overflow . Set it to 1 for Method1 or 2 for Method2 */
+#define configCHECK_FOR_STACK_OVERFLOW_NAME
+	vApplicationStackOverflowHook
+						\end{lstlisting} 
+						Auch hier aknn die anwendung nicht viel maachen ausser f"ur den Debugger anhalten:
+						\begin{lstlisting}
+void vApplicationStackOverflowHook ( xTaskHandle pxTask , char *
+pcTaskName ) {
+	/* This will get called if a stack overflow is detected during
+		the context switch . Set configCHECK_FOR_STACK_OVERFLOWS to 2
+		to also check for stack problems within nested interrupts ,
+		but only do this for debug purposes as it will increase the
+		context switch time . */
+	taskDISABLE_INTERRUPTS () ;
+	__asm volatile (" bkpt #0") ;
+	for (;;) {} /* stop for debugging */
+}
+						\end{lstlisting} 
+						das Betriebssystem kennt das ende des Task Stacks und kann somit "uberpr"ufen, ob der Stack pointer (SP) noch g"ultig ist.
+						Mit 1 oder 2 kann manzwischen zwei Detektionsmethoden w"ahlen:
+						\begin{itemize}
+							\item Methode 1:
+								  Der SP wird beim kontext Wechsel "uberpr"uft, ober er sich immernoch innerhalb des g"ultigen Stackbereichs befindet. 
+								  Diese Methodeist sehr schnell und einfach, es kann aber nicht detektiert werden, ob vorher z.B. durch einen Aufruf der STack schon
+								  "uberlaufen ist.
+							\item Methode 2:
+								  Bei dieser Methode wird zuerst die Methode 1 angewandt. Zus"atzlich wird "uberpr"uft ob ein bereich von 16 Bytes am Ene des Stacks
+								  immernoch mit den gleichen Werten gef"ullt ist. Diese Methode ist besser, braucht aber auch recht viel zeit f"ur jeden Taskwechsel. Auch kann
+								  diese Methode nicht alle F"alledetektieren, da nicht immer alle Bereiche auf dem Stack auch wirklich "uberschrieben werden. 
+						\end{itemize} 
+				\end{description}
 % ...stuff goes here....
 
 \end{multicols*}
