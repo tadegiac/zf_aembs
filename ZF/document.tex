@@ -1026,11 +1026,74 @@ void doCounting ( void ) {
 	Inc () ;
 	McuCriticalSection_ExitCritical ;
 }
-
 								\end{lstlisting}
+								Damit w"are das Problem gel"ost.
 					\end{description}
-
 				\subsection{Heap Memory}
+				FreeRTOS nutzt einen dynamischen Speicherbereich namens heap. Der Heap wird verwendet f"ur:
+				\begin{itemize}
+					\item Stack memory f"ur tasks
+					\item RTOS interne Strukturen wie Task Control Block (TCB)
+					\item Allozieren von Semaphoren, Mutex und Queues (was au immer die Begriff bedütend)
+					\item Dynamische Speicherallozierung von programmen mit pvPortMalloc()
+				\end{itemize}
+				FreeRTOS kommt mit einer eigenen Heap implementation. Es unterst"utzt 5 verschiedene Speicher allozierungsarten(Schemes). Diese sind konfiguriert 
+				von configFRTOS\_MEMORY\_SCHEME. Diese Sind implementiert in heap\_1.c, heap\_2.c etc. 
+				Es kann immer nur eine Implementatino aktiv sein in einem Projekt.
+				Die gr"osse des heap memory wird konfiguriert (in bytes) von configTOTAL\_HEAP\_SIZE.
+				\begin{description}
+					\item[$\bullet$ Heap Schemes]
+					 Je nach Anwendung sollte eine passende Speicher allozierung verwendet werden. Da jede Allozierungsart ein eigenes file hat, 
+					 ist es m"oglich eine eigene Allozierungsart zu implementieren.
+					 \begin{itemize}
+						\item Scheme 1: Speicher und Tasks k"onnen nur alloziert werden, aber nicht befreit(freed?). Funktioniert f"ur viele Anwendungen
+							  wo Speicher zu beginn alloziert wird, aber nicht released. Das Schema ist deterministisch(timing kann garantiert werden)
+							  , keine speicher Fragmentierung. (Und wieso)
+						\item Scheme 2: Speicher bl"ocke k"onnen dealoziert werden. Freed Bl"ocke werden nicht gemerged. Dies kann zu Speicherfragmentierung f"uhren.
+							  Es ist effizienter als das standard malloc() und free(), allerdings auch nicht deterministisch.
+						\item Scheme 3: ist ein tread-safe wrapper ja fuck kein planen
+						\item Scheme 4:Ist eigentlich das gleiche wie scheme 2, aber macht speicher merging und verhindert so speicherfragmentierung.
+						\item Mach speicher block merging wie in scheme 4. Erm"oglicht das aufteilen des Heapspeichers in verschiedene Bl"ocke. Diese
+							  Bl"ocke sind nicht angrenzend. vPortDefineHeapRegions() muss verwendet werden, um die speicher regionen zu definieren,
+							  bevor speicher alloziert wird.?
+					 \end{itemize}
+					 \item[$\bullet$ Speicher Fragmentierung]
+						 Mit scheme 2 ist es m"oglich Speicher zu fragmentieren, da die freien Speicherbl"ocke nicht zusammengef"uhrt werden. Selbst wenn genug
+						 Speicher zur verf"ugung st"unde, allozieren eines neuen Blockes kann fehlschlagen, da die Bl"ocke nicht zusammengef"uhrt wurden. Je nachdem 
+						 wie viele freie Speicherbl"ocke vorhanden sind, ist das System nicht deterministisch. Es braucht zeit, bis ein passender freier Block gefunden
+						 wurde. Diese Scheme kann verwendet werden, wenn tasks, queues,semaphores,mutexes etc. gel"oscht werden sollen. Sollte nicht verwendet werden, wenn die
+						 Anwendung zuf"allige oder dynamische allozierung bzw. deallozierung durchf"uhrt. Weil es eben zu Fragmentierung f"uhrt.
+					\item[$\bullet$ Speicher f"ur die Anwendung]
+						 FreeRTOS stellt folgende API zum allozieren und befreien von Speicher zur Verf"ugung(und die anzahl freier memory bytes).
+						 \begin{itemize}
+							\item pvPortMalloc() alloziert einen neuen Memory Block der gr"osse xWantedSize oder NULL wenn es nicht funktioniert hat.
+							\item vPortFree() befreit einen zuvor allozierten Block. Da kein heap garbage collector vorhanden ist, muss die Anwendung nicht 
+								  verwendete Speicherbl"ocke selbst freigeben.
+							\item xPortGetFreeHeapSize() retourniert die totale anzahl freier bytes (inklusive fragmention? ok?). Diese methode kann nicht
+								  zur Lokalisierung gr"osster Speicherbl"ocke verwendet werden(falls fragmentiert)ok?demfall....
+						 \end{itemize}
+						 \begin{lstlisting}
+void * pvPortMalloc ( size_t xWantedSize );
+void vPortFree ( void * pv );
+size_t xPortGetFreeHeapSize ( void );
+						\end{lstlisting}
+						Bei dynamischer Speicher allozierung kann es immer vorkommen, dass der heap manager keine freien Speicherbl"ocke mehr findet.
+						In diesem Fall ist der return Pointer NULL, und sollte "uberpruft werden. Der nachfolgend dargestellte Code allozierteinen neuen Speicherblock
+						um einen String zu speichern. Der Block wird danach wieder befreit.
+						 \begin{lstlisting}
+void foo ( void ) {
+	uint8_t * bufP ; /* pointer to buffer */
+	bufP = ( uint8_t *) pvPortMalloc ( sizeof (" Hello ")) ;
+	if ( bufP == NULL ) {
+		for (;;) ; /* ups! Out of memory ? */
+	}
+	( void ) strcpy ( bufP , " Hello "); /* copy data */
+	/* do something with data */
+	vPortFree ( bufP ); /* release memory */
+}
+						\end{lstlisting}
+				\end{description}
+
 				\subsection{Hooks}
 % ...stuff goes here....
 
